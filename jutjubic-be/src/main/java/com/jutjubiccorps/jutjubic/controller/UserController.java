@@ -6,6 +6,7 @@ import com.jutjubiccorps.jutjubic.mapper.UserDTOMapper;
 import com.jutjubiccorps.jutjubic.model.User;
 import com.jutjubiccorps.jutjubic.service.UserService;
 import org.apache.coyote.Response;
+import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/all")
+    @PageableAsQueryParam
     public ResponseEntity<Page<UserDTO>> getAllUsers(Pageable page){
         Page<User> users = userService.findAll(page);
 

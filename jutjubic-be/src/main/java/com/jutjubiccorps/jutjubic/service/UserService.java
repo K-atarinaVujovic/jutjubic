@@ -1,5 +1,7 @@
 package com.jutjubiccorps.jutjubic.service;
 
+import com.jutjubiccorps.jutjubic.exception.ConflictException;
+import com.jutjubiccorps.jutjubic.exception.NotFoundException;
 import com.jutjubiccorps.jutjubic.model.User;
 import com.jutjubiccorps.jutjubic.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,9 @@ public class UserService {
     public User registerUser(User user) {
         // Validation..
         // Hashing password..
-
+        if(userRepository.existsByUsername(user.getUsername())){
+            throw new ConflictException("Username " + user.getUsername() + " already exists");
+        }
         return userRepository.save(user);
     }
 
@@ -30,10 +34,16 @@ public class UserService {
     }
 
     public User findById(Long id){
+        if(!userRepository.existsById(id)){
+            throw new NotFoundException("User " + id + " not found");
+        }
         return userRepository.findOneById(id);
     }
 
     public User findByUsername(String username){
+        if(!userRepository.existsByUsername(username)){
+            throw new NotFoundException("User " + username + " not found");
+        }
         return userRepository.findOneByUsername(username);
     }
 
