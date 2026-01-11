@@ -62,12 +62,13 @@ export class LoginComponent implements OnInit {
       next: () => {
         this.router.navigate(["/home"]);
       },
-      error: () => {
-        this.submitted = false;
-        this.notification = {
-          msgType: 'error',
-          msgBody: 'Incorrect email or password.'
-        };
+      error: (err) => {
+        let msg = 'Login failed'
+        console.error(err);
+        if (err.error?.message) {
+          msg = err.error.message;
+        }
+        alert(msg);
       }
     });
   }

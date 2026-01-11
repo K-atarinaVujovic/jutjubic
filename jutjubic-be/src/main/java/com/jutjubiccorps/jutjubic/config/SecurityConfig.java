@@ -1,5 +1,6 @@
 package com.jutjubiccorps.jutjubic.config;
 
+import com.jutjubiccorps.jutjubic.security.auth.LoginRateLimitFilter;
 import com.jutjubiccorps.jutjubic.security.auth.RestAuthenticationEntryPoint;
 import com.jutjubiccorps.jutjubic.security.auth.TokenAuthenticationFilter;
 import com.jutjubiccorps.jutjubic.service.UserService;
@@ -81,6 +82,8 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable());
 
         http.addFilterBefore(new TokenAuthenticationFilter(tokenUtils, userService), BasicAuthenticationFilter.class);
+        // Rate limiter:
+        http.addFilterBefore(new LoginRateLimitFilter(), BasicAuthenticationFilter.class);
 
         http.authenticationProvider(authenticationProvider());
 
