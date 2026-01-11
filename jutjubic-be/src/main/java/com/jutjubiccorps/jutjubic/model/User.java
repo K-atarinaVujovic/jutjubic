@@ -2,12 +2,18 @@ package com.jutjubiccorps.jutjubic.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collections;
+import java.util.Collection;
 
 @Entity
 @Table(name = "USERS")
-public class User {
+public class User implements UserDetails {
     public User() {
         super();
     }
@@ -35,6 +41,7 @@ public class User {
     @Getter @Setter
     private String lastName;
 
+    @Email
     @Column(name = "email", unique=true, nullable = false)
     @Getter @Setter
     private String email;
@@ -51,4 +58,37 @@ public class User {
     @Column(name = "address", nullable = false)
     @Getter @Setter
     private String address;
+
+    //region UserDetails override
+
+    @JsonIgnore
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities(){
+        return Collections.emptyList();
+    }
+
+    // not important
+    @Override
+    public boolean isAccountNonExpired(){
+        return true;
+    }
+
+    // not important
+    @Override
+    public boolean isAccountNonLocked(){
+        return true;
+    }
+
+    // not important
+    @Override
+    public boolean isCredentialsNonExpired(){
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled(){
+        return true; // TODO: check if active
+    }
+
+    //endregion
 }

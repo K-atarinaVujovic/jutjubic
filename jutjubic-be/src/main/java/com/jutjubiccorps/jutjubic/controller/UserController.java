@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,11 @@ public class UserController {
         return new ResponseEntity<>(usersDTO, HttpStatus.OK);
     }
 
+    @GetMapping("/whoami")
+    public User user(Principal user) {
+        return this.userService.findByUsername(user.getName());
+    }
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id){
         User user = userService.findById(id);
@@ -48,12 +54,12 @@ public class UserController {
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<UserDTO> registerUser(CreateUserDTO dto){
-        User newUser = userMapper.fromCreateUserDTO(dto);
-
-        User user = userService.registerUser(newUser);
-
-        return new ResponseEntity<>(new UserDTO(user), HttpStatus.CREATED);
-    }
+//    @PostMapping("/register")
+//    public ResponseEntity<UserDTO> registerUser(CreateUserDTO dto){
+//        User newUser = userMapper.fromCreateUserDTO(dto);
+//
+//        User user = userService.registerUser(newUser);
+//
+//        return new ResponseEntity<>(new UserDTO(user), HttpStatus.CREATED);
+//    }
 }

@@ -9,6 +9,7 @@ import java.awt.print.Pageable;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findOneByUsername(String username);
     User findOneById(Long id);
+    User findOneByEmail(String email);
     boolean existsByUsername(String username);
     boolean existsById(Long id);
 }
