@@ -6,6 +6,7 @@ import com.jutjubiccorps.jutjubic.dto.UserTokenState;
 import com.jutjubiccorps.jutjubic.exception.ConflictException;
 import com.jutjubiccorps.jutjubic.mapper.UserDTOMapper;
 import com.jutjubiccorps.jutjubic.model.User;
+import com.jutjubiccorps.jutjubic.service.EmailService;
 import com.jutjubiccorps.jutjubic.service.UserService;
 import com.jutjubiccorps.jutjubic.util.TokenUtils;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,11 +34,15 @@ public class AuthenticationController {
 
     final private UserDTOMapper userDTOMapper;
 
-    public AuthenticationController(TokenUtils tokenUtils, AuthenticationManager authenticationManager, UserService userService, UserDTOMapper userDTOMapper){
+    final private EmailService emailService;
+
+
+    public AuthenticationController(EmailService emailService, TokenUtils tokenUtils, AuthenticationManager authenticationManager, UserService userService, UserDTOMapper userDTOMapper){
         this.tokenUtils = tokenUtils;
                 this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.userDTOMapper = userDTOMapper;
+        this.emailService = emailService;
     }
 
     @PostMapping("/login")
@@ -62,7 +67,16 @@ public class AuthenticationController {
         }
 
         User fromDto = userDTOMapper.fromCreateUserDTO(userRequest);
+
+        try {
+            emailService.sendNotificationAsync(fromDto);
+        }catch( Exception e ){
+            // todo
+        }
+
         User user = this.userService.registerUser(fromDto);
+
+
 
         String jwt = tokenUtils.generateToken(user.getUsername());
         int expiresIn = tokenUtils.getExpiredIn();
