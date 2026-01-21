@@ -4,12 +4,14 @@ import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { MaterialModule } from '../material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { UserActivateComponent } from './user-activate/user-activate.component';
 
 
 @NgModule({
   declarations: [
     LoginComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    UserActivateComponent
   ],
   imports: [
     CommonModule,
@@ -19,6 +21,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   exports: [
     LoginComponent,
     RegistrationComponent,
+    UserActivateComponent,
   ]
 })
 export class AuthModule { }

@@ -73,4 +73,9 @@ export class AuthService {
 
     this.user$.next(user);
   }
+
+  activate(token: string) {
+    return this.http
+      .post<any>(`${environment.apiHost}/auth/validateToken?token=${token}`, {});
+  }
 }

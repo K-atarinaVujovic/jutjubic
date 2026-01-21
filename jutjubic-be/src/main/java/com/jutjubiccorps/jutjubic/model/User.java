@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collections;
 import java.util.Collection;
+import java.util.UUID;
 
 @Entity
 @Table(name = "USERS")
@@ -26,6 +27,8 @@ public class User implements UserDetails {
         this.username = username;
         this.password = password;
         this.address = address;
+        this.validationToken = null;
+        this.enabled = false;
     }
 
     @Id
@@ -59,6 +62,14 @@ public class User implements UserDetails {
     @Getter @Setter
     private String address;
 
+    @Column(name = "validationToken")
+    @Getter @Setter
+    private String validationToken;
+
+    @Column(name = "enabled")
+    @Getter @Setter
+    private boolean enabled;
+
     //region UserDetails override
 
     @JsonIgnore
@@ -87,8 +98,18 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled(){
-        return true; // TODO: check if active
+        return enabled;
     }
 
     //endregion
+
+    public String generateToken(){
+        this.validationToken = UUID.randomUUID().toString();
+        return this.validationToken;
+    }
+
+    public boolean activateUser(){
+        this.enabled = true;
+        return this.enabled;
+    }
 }

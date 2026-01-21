@@ -4,6 +4,7 @@ import com.jutjubiccorps.jutjubic.dto.CreateUserDTO;
 import com.jutjubiccorps.jutjubic.dto.LoginUserDTO;
 import com.jutjubiccorps.jutjubic.dto.UserTokenState;
 import com.jutjubiccorps.jutjubic.exception.ConflictException;
+import com.jutjubiccorps.jutjubic.exception.ForbiddenException;
 import com.jutjubiccorps.jutjubic.mapper.UserDTOMapper;
 import com.jutjubiccorps.jutjubic.model.User;
 import com.jutjubiccorps.jutjubic.service.EmailService;
@@ -17,11 +18,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value="/api/auth", produces= MediaType.APPLICATION_JSON_VALUE)
@@ -52,6 +53,12 @@ public class AuthenticationController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         User user = (User) authentication.getPrincipal();
+
+        // Don't let user log in if account isnt enabled
+        if(!user.isEnabled()){
+            throw new ForbiddenException("User isn't activated");
+        }
+
         String jwt = tokenUtils.generateToken(user.getUsername());
         int expiresIn = tokenUtils.getExpiredIn();
 
@@ -68,19 +75,30 @@ public class AuthenticationController {
 
         User fromDto = userDTOMapper.fromCreateUserDTO(userRequest);
 
+        User user = this.userService.registerUser(fromDto);
+
         try {
-            emailService.sendNotificationAsync(fromDto);
+            System.out.println("Token: " + user.getValidationToken());
+            emailService.sendNotificationAsync(user);
         }catch( Exception e ){
             // todo
         }
-
-        User user = this.userService.registerUser(fromDto);
-
-
 
         String jwt = tokenUtils.generateToken(user.getUsername());
         int expiresIn = tokenUtils.getExpiredIn();
 
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
+    }
+
+    @PostMapping("/validateToken")
+    public ResponseEntity<Map<String, Object>> validateToken(@RequestParam String token) {
+        User user = userService.findByValidationToken(token);
+        userService.activateUser(user);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("message", "Email verified successfully");
+
+        return ResponseEntity.ok(response);
     }
 }

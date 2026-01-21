@@ -4,6 +4,7 @@ import com.jutjubiccorps.jutjubic.model.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -16,6 +17,9 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
+
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
 
     /*
      * Koriscenje klase za ocitavanje vrednosti iz application.properties fajla
@@ -37,7 +41,8 @@ public class EmailService {
     @Async
     public void sendNotificationAsync(User user) throws MailException, InterruptedException {
         String subject = "Jutjubic activation link";
-        String body = "Here is your link bro";
+        String link = frontendUrl + "/activate?token=" + user.getValidationToken();
+        String body = "Here is your link: " + link;
         sendEmail(user.getEmail(), subject, body);
     }
 

@@ -39,6 +39,7 @@ public class UserService implements UserDetailsService {
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.generateToken();
 
         return userRepository.save(user);
     }
@@ -61,6 +62,13 @@ public class UserService implements UserDetailsService {
         return userRepository.findOneByUsername(username);
     }
 
+    public User findByValidationToken(String token){
+        if(!userRepository.existsByValidationToken(token)){
+            throw new NotFoundException("User with token " + token + " not found");
+        }
+        return userRepository.findOneByValidationToken(token);
+    }
+
     public List<User> findAll()
     {
         return userRepository.findAll();
@@ -73,6 +81,11 @@ public class UserService implements UserDetailsService {
 
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
+    }
+
+    public void activateUser(User user){
+        user.activateUser();
+        userRepository.save(user);
     }
 
     //region UserDetailsService override
