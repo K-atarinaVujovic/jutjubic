@@ -1,9 +1,6 @@
 package com.jutjubiccorps.jutjubic.controller;
 
-import com.jutjubiccorps.jutjubic.exception.BadRequestException;
-import com.jutjubiccorps.jutjubic.exception.ConflictException;
-import com.jutjubiccorps.jutjubic.exception.NotFoundException;
-import com.jutjubiccorps.jutjubic.exception.UnauthorizedException;
+import com.jutjubiccorps.jutjubic.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,6 +25,10 @@ public class RestExceptionHandler {
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<String> handleConflict(ConflictException ex){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<String> handleConflict(ForbiddenException ex){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
     }
     @ExceptionHandler(IOException.class)
     public ResponseEntity<String> handleIO(IOException ex){
