@@ -40,6 +40,15 @@ public class VideoController {
         return new ResponseEntity<>(dtoPage, HttpStatus.OK);
     }
 
+    @GetMapping("/all-sorted")
+    public ResponseEntity<List<VideoDTO>> getAllVideosSorted() {
+        List<Video> videos = videoService.findAllSortedByDate(); // sorted on backend
+        List<VideoDTO> dtos = videos.stream()
+                .map(VideoDTO::new)
+                .toList();
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<VideoDTO> getVideo(@PathVariable Long id) {
         Video video = videoService.findById(id);

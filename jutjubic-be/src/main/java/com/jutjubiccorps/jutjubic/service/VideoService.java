@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -89,6 +90,11 @@ public class VideoService {
         } catch (IOException e) {
             throw new MediaIOException("Failed to create thumbnail path for: " + fileName);
         }
+    }
+
+    public List<Video> findAllSortedByDate() {
+        List<Video> videos = videoRepository.findAll(Sort.by(Sort.Direction.DESC, "dateCreated"));
+        return videos;
     }
 
     public ResponseEntity<InputStreamResource> loadVideo(Video video) throws IOException {

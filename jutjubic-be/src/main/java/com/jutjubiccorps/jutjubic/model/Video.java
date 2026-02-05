@@ -29,6 +29,9 @@ public class Video {
         this.location = location;
     }
 
+    public void setDateCreated(Instant dateCreated) {
+        this.dateCreated = dateCreated;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
@@ -63,7 +66,9 @@ public class Video {
     // Podesi datum pri pravljenju
     @PrePersist
     void onCreate() {
-        this.dateCreated = Instant.now();
+        if (this.dateCreated == null) {
+            this.dateCreated = Instant.now();
+        }
     }
 
     @Column(nullable = true)

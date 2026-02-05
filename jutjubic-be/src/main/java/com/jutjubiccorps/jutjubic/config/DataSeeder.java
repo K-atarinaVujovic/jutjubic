@@ -9,6 +9,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Component
@@ -28,6 +30,8 @@ public class DataSeeder implements ApplicationRunner {
     }
 
     private void seedVideos(){
+        Instant now = Instant.now();
+
         Video video1 = new Video(
                 "cat stare",
                 "A compilation of funny cat videos",
@@ -45,6 +49,7 @@ public class DataSeeder implements ApplicationRunner {
                 "uploads/video2.mp4",
                 "Home"
         );
+        video2.setDateCreated(now.minus(1, ChronoUnit.HOURS));
 
         videoService.save(video1);
         videoService.save(video2);
