@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
+
 @RestControllerAdvice
 public class RestExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
@@ -26,5 +28,9 @@ public class RestExceptionHandler {
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<String> handleConflict(ConflictException ex){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<String> handleIO(IOException ex){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
     }
 }

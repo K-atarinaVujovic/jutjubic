@@ -1,20 +1,52 @@
 package com.jutjubiccorps.jutjubic.config;
 
 import com.jutjubiccorps.jutjubic.model.User;
+import com.jutjubiccorps.jutjubic.model.Video;
 import com.jutjubiccorps.jutjubic.service.UserService;
+import com.jutjubiccorps.jutjubic.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class DataSeeder implements ApplicationRunner {
     private final UserService userService;
+    private final VideoService videoService;
 
+    // fato134@yahoo.com fata12345
+    // pera@yahoo.com pera
     @Override
     public void run(ApplicationArguments args){
         userService.registerUser(new User("Fato", "Zirosrag", "fato134@yahoo.com", "facini", "fata12345", "Bulevar Vladike Stepe 123"));
         userService.registerUser(new User("Pera", "Peric", "pera@yahoo.com", "pera", "pera", "Perina adresa 3"));
+
+        seedVideos();
+    }
+
+    private void seedVideos(){
+        Video video1 = new Video(
+                "cat stare",
+                "A compilation of funny cat videos",
+                List.of("cats", "funny", "compilation"),
+                "uploads/thumbnail1.png",
+                "uploads/video1.mp4",
+                "Home"
+        );
+
+        Video video2 = new Video(
+                "cat core",
+                "A compilation of funny cat videos",
+                List.of("haha", "a", "mm"),
+                "uploads/thumbnail2.png",
+                "uploads/video2.mp4",
+                "Home"
+        );
+
+        videoService.save(video1);
+        videoService.save(video2);
     }
 }
