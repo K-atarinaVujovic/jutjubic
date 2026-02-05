@@ -63,6 +63,14 @@ public class Video {
     @Getter
     private Instant dateCreated;
 
+    @Column(name = "viewCount", nullable = false)
+    @Getter
+    private int viewCount = 0;
+
+    public synchronized void incrementViewCount() {
+        this.viewCount++;
+    }
+
     // Podesi datum pri pravljenju
     @PrePersist
     void onCreate() {

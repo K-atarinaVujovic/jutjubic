@@ -21,7 +21,8 @@ public class VideoDTO {
                 video.getThumbnailUrl(),
                 video.getVideoUrl(),
                 video.getDateCreated(),
-                video.getLocation()
+                video.getLocation(),
+                video.getViewCount()
         );
     }
 
@@ -48,4 +49,7 @@ public class VideoDTO {
 
     @Getter
     private String location;
+
+    @Getter
+    private int viewCount;
 }

@@ -35,8 +35,6 @@ public class VideoController {
     private final VideoInteractionService videoInteractionService;
     private final UserService userService;
 
-    // ------------------- Video Endpoints -------------------
-
     @GetMapping("/all")
     @PageableAsQueryParam
     public ResponseEntity<Page<VideoDTO>> getAllVideos(Pageable pageable) {
@@ -54,6 +52,8 @@ public class VideoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<VideoDTO> getVideo(@PathVariable Long id) {
+        // view video
+        videoService.incrementViewCount(id);
         Video video = videoService.findById(id);
         return ResponseEntity.ok(new VideoDTO(video));
     }
@@ -97,8 +97,6 @@ public class VideoController {
             throw new MediaIOException("Failed to save uploaded files");
         }
     }
-
-    // ------------------- Video Interactions (Comments & Likes) -------------------
 
     @PostMapping("/{videoId}/comments")
     public Comment postComment(@PathVariable Long videoId,

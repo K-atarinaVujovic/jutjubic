@@ -112,4 +112,10 @@ public class VideoService {
             throw new MediaIOException("Failed to load video " + video.getId());
         }
     }
+
+    public void incrementViewCount(Long videoId){
+        Video video = findById(videoId);
+        video.incrementViewCount();
+        save(video);
+    }
 }
