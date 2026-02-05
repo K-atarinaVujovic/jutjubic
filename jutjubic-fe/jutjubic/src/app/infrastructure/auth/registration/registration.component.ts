@@ -79,7 +79,7 @@ export class RegistrationComponent {
       next: () => this.router.navigate(['home']),
       error: (err) => {
         console.error(err);
-        alert('Registration failed');
+        alert('Registration failed: ' + err.error);
       }
     });
   }
