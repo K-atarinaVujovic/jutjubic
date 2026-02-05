@@ -32,6 +32,7 @@ public class VideoService {
         this.videoRepository = videoRepository;
     }
 
+    //region CRUD
     public Video save(Video video) {
         return videoRepository.save(video);
     }
