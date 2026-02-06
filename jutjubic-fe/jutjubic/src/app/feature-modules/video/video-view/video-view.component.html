@@ -1,0 +1,48 @@
+<div class="video-view-container" *ngIf="video">
+  <!-- Video player -->
+  <div class="video-player-wrapper">
+    <video
+      [src]="videoStreamUrl"
+      controls
+      autoplay
+      class="video-player">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <!-- Video info -->
+  <div class="video-info">
+    <h2 class="video-title">{{ video.title }}</h2>
+    <div class="video-meta">
+      <span class="video-date">{{ video.dateCreated | date:'medium' }}</span>
+      <span class="video-views">👁️ {{ video.viewCount }} views</span>
+      <span class="video-location" *ngIf="video.location">📍 {{ video.location }}</span>
+    </div>
+
+    <div class="video-tags" *ngIf="video.tags?.length">
+      <span class="tag" *ngFor="let tag of video.tags">#{{ tag }}</span>
+    </div>
+
+    <div class="video-likes">
+      ❤️ {{ likes }}
+    </div>
+
+    <p class="video-description">{{ video.description }}</p>
+  </div>
+
+  <!-- Comments -->
+  <div class="comments-section">
+    <h3>Comments</h3>
+    <div *ngFor="let comment of comments" class="comment">
+      <strong>{{ comment.userName }}:</strong> {{ comment.text }}
+    </div>
+
+    <!-- Add comment -->
+    <div class="add-comment">
+      <input [(ngModel)]="newComment" placeholder="Add a comment..." />
+      <button (click)="postComment()">Post</button>
+    </div>
+  </div>
+</div>
+
+<p *ngIf="!video">Loading video...</p>
