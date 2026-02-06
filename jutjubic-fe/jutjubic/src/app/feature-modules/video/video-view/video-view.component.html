@@ -2,6 +2,7 @@
   <!-- Video player -->
   <div class="video-player-wrapper">
     <video
+      *ngIf="videoStreamUrl"
       [src]="videoStreamUrl"
       controls
       autoplay

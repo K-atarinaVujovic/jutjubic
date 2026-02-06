@@ -63,4 +63,12 @@ export class VideoService {
   getLikes(videoId: number): Observable<number> {
     return this.http.get<number>(`${this.baseUrl}/${videoId}/likes`);
   }
+
+  getVideoFile(path: string): Observable<Blob> {
+    const params = new HttpParams().set('path', path);
+    return this.http.get(`${this.baseUrl}/play`, {
+      params,
+      responseType: 'blob'
+    });
+  }
 }

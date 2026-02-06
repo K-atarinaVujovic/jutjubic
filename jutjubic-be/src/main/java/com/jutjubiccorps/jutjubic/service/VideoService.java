@@ -98,18 +98,11 @@ public class VideoService {
         return videos;
     }
 
-    public ResponseEntity<InputStreamResource> loadVideo(Video video) throws IOException {
+    public byte[] loadVideo(String path) {
         try {
-            Path path = Path.of(video.getVideoUrl());
-            InputStream videoStream = Files.newInputStream(path);
-            InputStreamResource resource = new InputStreamResource(videoStream);
-
-            return ResponseEntity.ok()
-                    .contentLength(Files.size(path))
-                    .contentType(MediaType.valueOf("video/mp4"))
-                    .body(resource);
+            return Files.readAllBytes(Path.of(path)); // read full file
         } catch (IOException e) {
-            throw new MediaIOException("Failed to load video " + video.getId());
+            throw new MediaIOException("Failed to load video: " + path);
         }
     }
 
