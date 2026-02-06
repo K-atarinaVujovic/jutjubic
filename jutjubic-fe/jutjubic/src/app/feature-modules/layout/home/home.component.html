@@ -1,4 +1,8 @@
 <div class="home">
   <h1>Home</h1>
-  <p>zamislite snimke ovde</p>
+  <app-video-preview
+      *ngFor="let video of videos"
+      [video]="video"
+      (click)="openVideo(video)">
+    </app-video-preview>
 </div>

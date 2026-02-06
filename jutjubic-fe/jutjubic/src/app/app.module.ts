@@ -11,6 +11,7 @@ import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { LayoutModule } from './feature-modules/layout/layout.module';
 import { UserModule } from './feature-modules/user/user.module';
 import { HomeComponent } from './feature-modules/layout/home/home.component';
+import { VideoModule } from './feature-modules/video/video.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { HomeComponent } from './feature-modules/layout/home/home.component';
     BrowserAnimationsModule,
     LayoutModule,
     UserModule,
+    VideoModule,
   ],
   providers: [
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
