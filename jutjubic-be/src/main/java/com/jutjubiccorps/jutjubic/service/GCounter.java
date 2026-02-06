@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class GCounter {
     // count po replici
+    // string = id replike
     private Map<String, Integer> counts = new HashMap<>();
 
     public void increment(String replicaId) {
