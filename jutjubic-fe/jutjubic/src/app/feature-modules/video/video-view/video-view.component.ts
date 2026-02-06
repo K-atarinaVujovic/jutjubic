@@ -30,7 +30,10 @@ export class VideoViewComponent implements OnInit {
       this.video = video;
 
       // Video stream endpoint
-      this.videoStreamUrl = `http://localhost:8080/api/videos/${id}/stream`;
+      // this.videoStreamUrl = `http://localhost:8080/api/videos/${id}/stream`;
+      this.videoService.getVideoFile(this.video.videoUrl).subscribe(blob => {
+          this.videoStreamUrl = URL.createObjectURL(blob);
+        });
 
       // Load likes
       this.videoService.getLikes(id).subscribe(l => this.likes = l);

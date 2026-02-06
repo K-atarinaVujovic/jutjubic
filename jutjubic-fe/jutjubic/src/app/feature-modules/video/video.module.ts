@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { VideoPreviewComponent } from './video-preview/video-preview.component';
 import { VideoViewComponent } from './video-view/video-view.component';
 import { FormsModule } from '@angular/forms';
+import { A11yModule } from "@angular/cdk/a11y";
 
 
 
@@ -14,7 +15,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     FormsModule,
-  ],
+    A11yModule
+],
   exports: [
     VideoPreviewComponent
   ]

@@ -58,6 +58,15 @@ public class VideoController {
         return ResponseEntity.ok(new VideoDTO(video));
     }
 
+    @GetMapping("/play")
+    public ResponseEntity<byte[]> getVideoFile(@RequestParam String path) {
+        byte[] videoBytes = videoService.loadVideo(path);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.valueOf("video/mp4"));
+        return new ResponseEntity<>(videoBytes, headers, HttpStatus.OK);
+    }
+
     @GetMapping("/thumbnail")
     public ResponseEntity<byte[]> getThumbnail(@RequestParam String path) {
         byte[] img = videoService.loadThumbnail(path);
