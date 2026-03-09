@@ -21,7 +21,9 @@ export class AuthService {
     private tokenStorage: TokenStorage,
     private router: Router,
     private jwtHelper: JwtHelperService
-  ) {}
+  ) {
+    this.restoreSession();
+  }
 
   login(login: Login) {
     return this.http
