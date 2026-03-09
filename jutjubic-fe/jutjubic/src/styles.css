@@ -29,6 +29,10 @@ body {
   justify-content: center;
   align-items: center;
 }
+.max-width-height{
+  height: 100%;
+  width: 100%;
+}
 .text-center{
   text-align: center;
 }
