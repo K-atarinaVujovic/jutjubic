@@ -6,7 +6,7 @@ html, body { height: 100%; }
   --color-bg: #F9E9C8;
   --color-surface: #F2D492;
   --color-primary: #F29559;
-  --color-danger: red;
+  --color-danger: rgb(116, 49, 49);
   --border-radius: 10px;
 }
 body { 
@@ -19,6 +19,9 @@ body {
 }
 .flex-row{
   display: flex;
+}
+.error-message{
+  color: var(--color-danger)
 }
 .flex-column{
   display: flex;

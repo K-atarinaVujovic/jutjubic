@@ -13,6 +13,8 @@ export class VideoUploadComponent {
   thumbnailPreview: string | ArrayBuffer | null = "";
   videoPreview: string | ArrayBuffer | null = "";
   selectedVideoFile: File | null = null;
+  showError: boolean = true;
+  errorMessage: string = "";
 
   uploadForm = new FormGroup({
     title: new FormControl('', [Validators.required]),
@@ -27,8 +29,12 @@ export class VideoUploadComponent {
   ) {}
 
   publishVideo(): void {
+    this.showError = false;
+    this.errorMessage = "";
     if(this.uploadForm.invalid){
       this.uploadForm.markAllAsTouched();
+      this.errorMessage = "Invalid form data";
+      this.showError = true;
       return;
     }
 

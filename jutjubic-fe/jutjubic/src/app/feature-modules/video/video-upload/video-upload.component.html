@@ -39,6 +39,7 @@
         </div>
         <div class="submit-button">
           <button (click)="publishVideo()">Publish</button>
+          <p *ngIf="showError" class="error-message">{{errorMessage}}</p>
         </div>
       </div>
     </div>
