@@ -1,0 +1,47 @@
+<div class="main">
+  <h1>Video upload</h1>
+  <form [formGroup]="uploadForm">
+    <div class="content">
+      <div class="uploads">
+        <div>
+          <p>Video</p>
+          <div class="video-upload" (click)="videoInput.click()">
+            <video *ngIf="videoPreview" [src]="videoPreview" class="video-preview"></video>
+            <p *ngIf="!videoPreview" class="flex-row flex-center max-width-height">Upload video</p>
+            <input type="file" #videoInput style="display:none" accept="video/*" (change)="onVideoSelected($event)">
+          </div>
+        </div>
+        <div>
+          <p>Thumbnail</p>
+          <div class="thumbnail-upload" (click)="thumbnailInput.click()">
+            <img *ngIf="thumbnailPreview" [src]="thumbnailPreview" alt="Thumbnail preview" class="thumbnail-preview">
+            <p *ngIf="!thumbnailPreview" class="flex-row flex-center max-width-height">Upload thumbnail</p>
+            <input type="file" #thumbnailInput style="display:none" accept="image/*" (change)="onThumbnailSelected($event)">
+          </div>
+        </div>
+      </div>
+      <div class="info">
+        <div class="info-section">
+          <p>Title</p>
+          <input formControlName="title">
+        </div>
+        <div class="info-section">
+          <p>Description</p>
+          <input formControlName="description">
+        </div>
+        <div class="info-section">
+          <p>Tags (Tag1, Tag2...)</p>
+          <input formControlName="tags">
+        </div>
+        <div class="info-section">
+          <p>Location</p>
+          <input formControlName="location">
+        </div>
+        <div class="submit-button">
+          <button (click)="publishVideo()">Publish</button>
+          <p *ngIf="showError" class="error-message">{{errorMessage}}</p>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

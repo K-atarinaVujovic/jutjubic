@@ -6,6 +6,7 @@ import { RegistrationComponent } from './infrastructure/auth/registration/regist
 import { HomeComponent } from './feature-modules/layout/home/home.component';
 import { UserActivateComponent } from './infrastructure/auth/user-activate/user-activate.component';
 import { VideoViewComponent } from './feature-modules/video/video-view/video-view.component';
+import { VideoUploadComponent } from './feature-modules/video/video-upload/video-upload.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'activate', component: UserActivateComponent },
   { path: 'video/:id', component: VideoViewComponent },
+  { path: 'upload', component: VideoUploadComponent },
   { path: '**', redirectTo: 'login' },
 ];
 

@@ -6,7 +6,7 @@ export interface Video {
   tags: string[];
   thumbnailUrl: string;
   videoUrl: string;
-  dateCreated: string;
+  dateCreated?: string;
   location: string;
   viewCount: number;
 }

@@ -1,3 +1,12 @@
+# Non-seeded uploads
+jutjubic-be/uploads/thumbnails/*
+!jutjubic-be/uploads/thumbnails/thumbnail1.png
+!jutjubic-be/uploads/thumbnails/thumbnail2.png
+jutjubic-be/uploads/videos/*
+!jutjubic-be/uploads/videos/video1.mp4
+!jutjubic-be/uploads/videos/video2.mp4
+
+
 # Angular specific
 /dist/
 /out-tsc/

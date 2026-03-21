@@ -1,8 +1,10 @@
 <div class="home">
   <h1>Home</h1>
-  <app-video-preview
+  <div class="content">
+    <app-video-preview
       *ngFor="let video of videos"
       [video]="video"
       (click)="openVideo(video)">
     </app-video-preview>
+  </div>
 </div>

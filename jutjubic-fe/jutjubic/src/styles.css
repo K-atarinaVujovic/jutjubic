@@ -1,4 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+:root{
+  --c1: #B8B08D;
+  --color-bg: #F9E9C8;
+  --color-surface: #F2D492;
+  --color-primary: #F29559;
+  --color-danger: rgb(116, 49, 49);
+  --border-radius: 10px;
+}
+body { 
+  margin: 0; 
+  background-color: var(--color-bg);
+  /* font-family: Roboto, "Helvetica Neue", sans-serif;  */
+}
+*{
+  font-family: 'Courier New', monospace;
+}
+.flex-row{
+  display: flex;
+}
+.error-message{
+  color: var(--color-danger)
+}
+.flex-column{
+  display: flex;
+  flex-direction: column;
+}
+.flex-center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.max-width-height{
+  height: 100%;
+  width: 100%;
+}
+.text-center{
+  text-align: center;
+}

@@ -1,26 +1,21 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <div class="buttons">
-      <a routerLink="/home" *ngIf="isLoggedIn">Jutjubic</a>
-      <p *ngIf="isLoggedIn">{{user?.username}}</p>
-      <span></span>
-
-      <button mat-raised-button color="accent" routerLink="/register">
-        Register
-      </button>
-
-      <button mat-raised-button color="accent" routerLink="/login">
-        Login
-      </button>
-
-      <button mat-raised-button color="accent" *ngIf="isLoggedIn" (click)="logout()">
-        Logout
-      </button>
+<div class="header">
+  <a routerLink="/home" class="site-name">Jutjubic</a>
+  <div class="menu-options" *ngIf="isLoggedIn">
+    <a routerLink="/home">Home</a>
+    <a routerLink="/upload">Upload</a>
+  </div>
+  <div class="user">
+    <div *ngIf="isLoggedIn" class="flex-row flex-center user-info">
+      <div class="flex-column flex-center">
+        <mat-icon *ngIf="isLoggedIn">account_circle</mat-icon>
+        <p class="text-center">{{user?.username}}</p>
+      </div>   
+      <a (click)="logout()">Logout</a>
     </div>
-
+    <div *ngIf="!isLoggedIn" class="flex-row account-actions">
+      <a routerLink="/login">Login</a>
+      <a routerLink="/register">Register</a>
+    </div>
     
-
-    
-    
-  </mat-toolbar-row>
-</mat-toolbar>
+  </div>
+</div>
