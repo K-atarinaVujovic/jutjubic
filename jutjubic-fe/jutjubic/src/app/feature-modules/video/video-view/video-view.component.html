@@ -16,8 +16,8 @@
     <h2 class="video-title">{{ video.title }}</h2>
     <div class="video-meta">
       <span class="video-date">{{ video.dateCreated | date:'medium' }}</span>
-      <span class="video-views">👁️ {{ video.viewCount }} views</span>
-      <span class="video-location" *ngIf="video.location">📍 {{ video.location }}</span>
+      <span class="video-views">Views: {{ video.viewCount }}</span>
+      <span class="video-location" *ngIf="video.location">Location: {{ video.location }}</span>
     </div>
 
     <div class="video-tags" *ngIf="video.tags?.length">
@@ -25,7 +25,7 @@
     </div>
 
     <div class="video-likes">
-      ❤️ {{ likes }}
+      👍 {{ likes }}
     </div>
 
     <p class="video-description">{{ video.description }}</p>
@@ -35,7 +35,7 @@
   <div class="comments-section">
     <h3>Comments</h3>
     <div *ngFor="let comment of comments" class="comment">
-      <strong>{{ comment.userName }}:</strong> {{ comment.text }}
+      <strong>{{ comment.user.firstName }}:</strong> {{ comment.text }}
     </div>
 
     <!-- Add comment -->
