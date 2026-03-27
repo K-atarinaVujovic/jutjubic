@@ -3,6 +3,7 @@ package com.jutjubiccorps.jutjubic.controller;
 import com.jutjubiccorps.jutjubic.dto.CreateVideoDTO;
 import com.jutjubiccorps.jutjubic.dto.VideoDTO;
 import com.jutjubiccorps.jutjubic.exception.MediaIOException;
+import com.jutjubiccorps.jutjubic.exception.NotFoundException;
 import com.jutjubiccorps.jutjubic.model.Comment;
 import com.jutjubiccorps.jutjubic.model.Like;
 import com.jutjubiccorps.jutjubic.model.Video;
@@ -125,6 +126,23 @@ public class VideoController {
         Like like = videoInteractionService.addLike(videoId, userId);
         if (like == null) return ResponseEntity.badRequest().body("Already liked");
         return ResponseEntity.ok("Liked");
+    }
+
+    @DeleteMapping("/{videoId}/likes")
+    public ResponseEntity<String> removeLike(@PathVariable Long videoId, @RequestParam Long userId){
+        try{
+            videoInteractionService.removeLike(videoId, userId);
+            return ResponseEntity.ok("Like removed");
+        }
+        catch(NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
+    }
+
+    @GetMapping("/{videoId}/likes/{userId}")
+    public ResponseEntity<Boolean> hasUserLiked(@PathVariable Long videoId, @PathVariable Long userId){
+        return ResponseEntity.ok(videoInteractionService.hasUserLiked(videoId, userId));
     }
 
     @GetMapping("/{videoId}/likes")

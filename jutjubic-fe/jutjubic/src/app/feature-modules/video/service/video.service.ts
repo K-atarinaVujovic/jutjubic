@@ -61,6 +61,18 @@ export class VideoService {
     });
   }
 
+  removeLike(videoId: number, userId: number): Observable<string> {
+    const params = new HttpParams().set('userId', userId);
+    return this.http.delete(`${this.baseUrl}/${videoId}/likes`, {
+      params,
+      responseType: 'text'
+    });
+  }
+
+  hasUserLiked(videoId: number, userId: number): Observable<boolean>{
+    return this.http.get<boolean>(`${this.baseUrl}/${videoId}/likes/${userId}`);
+  }
+
   getLikes(videoId: number): Observable<number> {
     return this.http.get<number>(`${this.baseUrl}/${videoId}/likes`);
   }

@@ -23,7 +23,7 @@ public class DataSeeder implements ApplicationRunner {
     // pera@yahoo.com pera
     @Override
     public void run(ApplicationArguments args){
-        User f = userService.registerUser(new User("Fato", "Zirosrag", "fato134@yahoo.com", "facini", "fata12345", "Bulevar Vladike Stepe 123"));
+        User f = userService.registerUser(new User("Fato", "Zirosrag", "fato@yahoo.com", "facini", "fato", "Bulevar Vladike Stepe 123"));
         User p = userService.registerUser(new User("Pera", "Peric", "pera@yahoo.com", "pera", "pera", "Perina adresa 3"));
         userService.activateUser(f);
         userService.activateUser(p);

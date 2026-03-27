@@ -56,4 +56,43 @@ export class VideoViewComponent implements OnInit {
         this.newComment = '';
       });
   }
+
+  likeVideo(){
+    const userId = this.authService.currentUser.id;
+    const videoId = this.video.id;
+    this.videoService.hasUserLiked(videoId, userId).subscribe({
+      next: (result) => {
+        if(result == true){
+          this.unlikeVideo();
+        }
+        else{
+          this.videoService.like(videoId, userId).subscribe({
+            next: (result) => {
+              this.likes += 1;
+            },
+            error: (err) => {
+              
+            }
+          });
+        }
+      },
+      error: (err) => {
+        
+      }
+    })
+    
+  }
+  
+  unlikeVideo(){
+    const userId = this.authService.currentUser.id;
+    const videoId = this.video.id;
+    this.videoService.removeLike(videoId, userId).subscribe({
+      next: (result) => {
+        this.likes -= 1;
+      },
+      error: (err) => {
+        
+      }
+    });
+  }
 }

@@ -52,6 +52,12 @@
 .video-likes {
   margin-top: 8px;
   font-weight: bold;
+  width:fit-content;  
+  user-select: none;
+}
+
+.like-emoji{
+  font-size: 25px;
 }
 
 .video-description {
