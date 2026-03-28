@@ -8,4 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface LikeRepository extends JpaRepository<Like, Long> {
     int countByVideo(Video video);
     boolean existsByVideoAndUser(Video video, User user);
+    void deleteById(Long id);
+    Like findOneById(Long id);
+    Like findOneByUser(User user);
 }

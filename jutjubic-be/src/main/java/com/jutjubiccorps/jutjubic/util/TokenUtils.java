@@ -41,14 +41,15 @@ public class TokenUtils
 
     // Generisanje JWT tokena
 
-    public String generateToken(String username){
+    public String generateToken(User user){
         Claims claims = Jwts.claims();
-        claims.put("username", username);
+        claims.put("username", user.getUsername());
+        claims.put("id", user.getId());
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuer(APP_NAME)
-                .setSubject(username)
+                .setSubject(user.getUsername())
                 .setAudience(generateAudience())
                 .setIssuedAt(new Date())
                 .setExpiration(generateExpirationDate())

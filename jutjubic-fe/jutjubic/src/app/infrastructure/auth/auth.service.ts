@@ -25,6 +25,10 @@ export class AuthService {
     this.restoreSession();
   }
 
+  get currentUser(): User {
+    return this.user$.value;
+  }
+
   login(login: Login) {
     return this.http
       .post<AuthenticationResponse>(`${environment.apiHost}/auth/login`, login)
@@ -67,7 +71,7 @@ export class AuthService {
   private setUserFromToken() {
     const token = this.tokenStorage.getAccessToken()!;
     const decoded = this.jwtHelper.decodeToken(token);
-
+  console.log('Decoded token:', decoded);
     const user: User = {
       id: decoded.id,
       username: decoded.sub,

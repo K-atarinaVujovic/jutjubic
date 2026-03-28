@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Video } from '../model/video.model';
+import { Comment } from '../model/comment.model';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +41,7 @@ export class VideoService {
     return this.http.post<Video>(`${this.baseUrl}/upload`, formData);
   }
 
-  getComments(videoId: number): Observable<any[]> {
+  getComments(videoId: number): Observable<Comment[]> {
     return this.http.get<any[]>(`${this.baseUrl}/${videoId}/comments`);
   }
 
@@ -58,6 +59,18 @@ export class VideoService {
       params,
       responseType: 'text'
     });
+  }
+
+  removeLike(videoId: number, userId: number): Observable<string> {
+    const params = new HttpParams().set('userId', userId);
+    return this.http.delete(`${this.baseUrl}/${videoId}/likes`, {
+      params,
+      responseType: 'text'
+    });
+  }
+
+  hasUserLiked(videoId: number, userId: number): Observable<boolean>{
+    return this.http.get<boolean>(`${this.baseUrl}/${videoId}/likes/${userId}`);
   }
 
   getLikes(videoId: number): Observable<number> {
