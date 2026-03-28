@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -29,9 +32,28 @@ public class Video {
         this.location = location;
     }
 
+    public Video(
+            String title,
+            String description,
+            List<String> tags,
+            String thumbnailUrl,
+            String videoUrl,
+            String location,
+            LocalDateTime scheduledAt
+    ) {
+        this.title = title;
+        this.description = description;
+        this.tags = tags;
+        this.thumbnailUrl = thumbnailUrl;
+        this.videoUrl = videoUrl;
+        this.location = location;
+        this.scheduledAt = scheduledAt;
+    }
+
     public void setDateCreated(Instant dateCreated) {
         this.dateCreated = dateCreated;
     }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
@@ -67,6 +89,10 @@ public class Video {
     @Getter
     private int viewCount = 0;
 
+    @Column(name = "scheduledAt", nullable = true)
+    @Getter @Setter
+    private LocalDateTime scheduledAt;
+
     public synchronized void incrementViewCount() {
         this.viewCount++;
     }
@@ -78,6 +104,19 @@ public class Video {
             this.dateCreated = Instant.now();
         }
     }
+
+//    @Transient
+//    boolean isLive(){
+//        LocalDateTime now = LocalDateTime.now();
+//        boolean startedStreaming = now.isAfter(scheduledAt);
+////        boolean finishedStreaming = Duration.between(now, scheduledAt).getSeconds() >=
+//        return true;
+//    }
+
+
+    @Column(nullable=false)
+    @Getter @Setter
+    double durationSeconds;
 
     @Column(nullable = true)
     @Getter @Setter

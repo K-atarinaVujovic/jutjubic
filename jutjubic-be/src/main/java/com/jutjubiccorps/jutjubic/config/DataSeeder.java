@@ -9,6 +9,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -22,7 +23,7 @@ public class DataSeeder implements ApplicationRunner {
     // fato134@yahoo.com fata12345
     // pera@yahoo.com pera
     @Override
-    public void run(ApplicationArguments args){
+    public void run(ApplicationArguments args) throws IOException{
         User f = userService.registerUser(new User("Fato", "Zirosrag", "fato@yahoo.com", "facini", "fato", "Bulevar Vladike Stepe 123"));
         User p = userService.registerUser(new User("Pera", "Peric", "pera@yahoo.com", "pera", "pera", "Perina adresa 3"));
         userService.activateUser(f);
@@ -30,7 +31,7 @@ public class DataSeeder implements ApplicationRunner {
         seedVideos();
     }
 
-    private void seedVideos(){
+    private void seedVideos() throws IOException {
         Instant now = Instant.now();
         String thumbnailUrl = "uploads\\thumbnails\\";
         String videoUrl = "uploads\\videos\\";

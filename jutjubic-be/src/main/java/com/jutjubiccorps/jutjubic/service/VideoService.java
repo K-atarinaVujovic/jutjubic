@@ -33,8 +33,22 @@ public class VideoService {
     }
 
     //region CRUD
-    public Video save(Video video) {
+    public Video save(Video video) throws IOException{
+        double duration = extractDuration(video.getVideoUrl());
+        video.setDurationSeconds(duration);
         return videoRepository.save(video);
+    }
+
+    private double extractDuration(String videoPath) throws IOException {
+        ProcessBuilder pb = new ProcessBuilder(
+                "ffprobe", "-v", "error",
+                "-show_entries", "format=duration",
+                "-of", "default=noprint_wrappers=1:nokey=1",
+                videoPath
+        );
+        Process process = pb.start();
+        String output = new String(process.getInputStream().readAllBytes());
+        return Double.parseDouble(output.trim());
     }
 
     public void remove(Long id) {
@@ -106,7 +120,7 @@ public class VideoService {
         }
     }
 
-    public void incrementViewCount(Long videoId){
+    public void incrementViewCount(Long videoId) throws IOException{
         Video video = findById(videoId);
         video.incrementViewCount();
         save(video);

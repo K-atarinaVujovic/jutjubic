@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -52,7 +53,7 @@ public class VideoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VideoDTO> getVideo(@PathVariable Long id) {
+    public ResponseEntity<VideoDTO> getVideo(@PathVariable Long id) throws IOException {
         // view video
         videoService.incrementViewCount(id);
         Video video = videoService.findById(id);
