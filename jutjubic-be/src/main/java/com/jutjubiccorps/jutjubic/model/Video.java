@@ -30,6 +30,7 @@ public class Video {
         this.thumbnailUrl = thumbnailUrl;
         this.videoUrl = videoUrl;
         this.location = location;
+        this.scheduledAt = null;
     }
 
     public Video(
@@ -105,14 +106,21 @@ public class Video {
         }
     }
 
-//    @Transient
-//    boolean isLive(){
-//        LocalDateTime now = LocalDateTime.now();
-//        boolean startedStreaming = now.isAfter(scheduledAt);
-////        boolean finishedStreaming = Duration.between(now, scheduledAt).getSeconds() >=
-//        return true;
-//    }
+    @Transient
+    boolean isLive(){
+        if (scheduledAt == null) return false;
+        LocalDateTime now = LocalDateTime.now();
+        boolean startedStreaming = now.isAfter(scheduledAt);
+        boolean finishedStreaming = Duration.between(scheduledAt, now).getSeconds() >= durationSeconds;
+        return startedStreaming && !finishedStreaming;
+    }
 
+    @Transient
+    boolean isForRegularViewing(){
+        if (scheduledAt == null) return true;
+        boolean finishedStreaming = Duration.between(scheduledAt, LocalDateTime.now()).getSeconds() >= durationSeconds;
+        return finishedStreaming;
+    }
 
     @Column(nullable=false)
     @Getter @Setter
