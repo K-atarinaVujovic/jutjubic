@@ -34,7 +34,7 @@ export class VideoViewComponent implements OnInit {
 
       // Video stream endpoint
       // this.videoStreamUrl = `http://localhost:8080/api/videos/${id}/stream`;
-      this.videoService.getVideoFile(this.video.videoUrl).subscribe(blob => {
+      this.videoService.getVideoFile(this.video.id).subscribe(blob => {
           this.videoStreamUrl = URL.createObjectURL(blob);
         });
 

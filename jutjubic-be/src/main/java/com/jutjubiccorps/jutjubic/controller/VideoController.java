@@ -37,13 +37,13 @@ public class VideoController {
     private final VideoInteractionService videoInteractionService;
     private final UserService userService;
 
-    @GetMapping("/all")
-    @PageableAsQueryParam
-    public ResponseEntity<Page<VideoDTO>> getAllVideos(Pageable pageable) {
-        Page<Video> videos = videoService.findAll(pageable);
-        Page<VideoDTO> dtoPage = videos.map(VideoDTO::new);
-        return ResponseEntity.ok(dtoPage);
-    }
+//    @GetMapping("/all")
+//    @PageableAsQueryParam
+//    public ResponseEntity<Page<VideoDTO>> getAllVideos(Pageable pageable) {
+//        Page<Video> videos = videoService.findAll(pageable);
+//        Page<VideoDTO> dtoPage = videos.map(VideoDTO::new);
+//        return ResponseEntity.ok(dtoPage);
+//    }
 
     @GetMapping("/all-sorted")
     public ResponseEntity<List<VideoDTO>> getAllVideosSorted() {
@@ -61,8 +61,8 @@ public class VideoController {
     }
 
     @GetMapping("/play")
-    public ResponseEntity<byte[]> getVideoFile(@RequestParam String path) {
-        byte[] videoBytes = videoService.loadVideo(path);
+    public ResponseEntity<byte[]> getVideoFile(@RequestParam Long id) {
+        byte[] videoBytes = videoService.loadVideo(id);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf("video/mp4"));
@@ -70,8 +70,8 @@ public class VideoController {
     }
 
     @GetMapping("/thumbnail")
-    public ResponseEntity<byte[]> getThumbnail(@RequestParam String path) {
-        byte[] img = videoService.loadThumbnail(path);
+    public ResponseEntity<byte[]> getThumbnail(@RequestParam Long id) {
+        byte[] img = videoService.loadThumbnail(id);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<>(img, headers, HttpStatus.OK);

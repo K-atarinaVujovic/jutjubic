@@ -59,26 +59,28 @@ public class VideoService {
     }
 
     public Video findById(Long id) {
-        if (!videoRepository.existsById(id)) {
-            throw new NotFoundException("Video " + id + " not found");
-        }
-        return videoRepository.findOneById(id);
+        return videoRepository.findVisibleById(id)
+                .orElseThrow(() -> new NotFoundException("Video " + id + " not found"));
     }
 
     public List<Video> findAll() {
-        return videoRepository.findAll();
+
+//        return videoRepository.findAll();
+        return videoRepository.findAllVisible();
     }
 
-    public Page<Video> findAll(Pageable pageable) {
-        return videoRepository.findAllByOrderByDateCreatedDesc(pageable);
-    }
 
-    public Page<Video> searchByTitle(String title, Pageable pageable) {
-        return videoRepository.findByTitleContainingIgnoreCase(title, pageable);
-    }
+//    public Page<Video> findAll(Pageable pageable) {
+//        return videoRepository.findAllByOrderByDateCreatedDesc(pageable);
+//    }
+
+//    public Page<Video> searchByTitle(String title, Pageable pageable) {
+//        return videoRepository.findByTitleContainingIgnoreCase(title, pageable);
+//    }
 
     @Cacheable("thumbnails")
-    public byte[] loadThumbnail(String path)  {
+    public byte[] loadThumbnail(Long id)  {
+        String path = findById(id).getThumbnailUrl();
         try {
             return Files.readAllBytes(Path.of(path));
         } catch (IOException e) {
@@ -108,11 +110,12 @@ public class VideoService {
     }
 
     public List<Video> findAllSortedByDate() {
-        List<Video> videos = videoRepository.findAll(Sort.by(Sort.Direction.DESC, "dateCreated"));
+        List<Video> videos = videoRepository.findAllVisibleSorted(Sort.by(Sort.Direction.DESC, "dateCreated"));
         return videos;
     }
 
-    public byte[] loadVideo(String path) {
+    public byte[] loadVideo(Long videoId) {
+        String path = findById(videoId).getVideoUrl();
         try {
             return Files.readAllBytes(Path.of(path)); // read full file
         } catch (IOException e) {

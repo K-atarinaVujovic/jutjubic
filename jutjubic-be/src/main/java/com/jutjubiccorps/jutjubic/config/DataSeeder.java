@@ -62,20 +62,20 @@ public class DataSeeder implements ApplicationRunner {
                 "Ultimate cat stare",
                 "Ultimate compilation",
                 List.of("cats", "funny", "compilation"),
-                thumbnailUrl + "thumbnail1.png",
-                videoUrl + "video1.mp4",
+                thumbnailUrl + "thumbnail3.png",
+                videoUrl + "video3.mp4",
                 "Ultimate Home",
-                LocalDateTime.now().plusMinutes(10)
+                LocalDateTime.now().minusMinutes(10)
         );
 
         Video video4 = new Video(
                 "ultimate cat core",
                 "ultimate compilation of funny cat videos",
                 List.of("ok"),
-                thumbnailUrl + "thumbnail2.png",
-                videoUrl + "video2.mp4",
+                thumbnailUrl + "thumbnail4.png",
+                videoUrl + "video4.mp4",
                 "Ultimate home",
-                LocalDateTime.now().plusMinutes(3)
+                LocalDateTime.now().plusSeconds(30)
         );
 
         videoService.save(video1);
