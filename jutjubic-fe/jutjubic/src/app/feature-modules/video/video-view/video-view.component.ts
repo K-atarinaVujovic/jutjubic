@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { VideoService } from '../service/video.service';
 import { Video } from '../model/video.model';
@@ -11,6 +11,8 @@ import { AuthService } from 'src/app/infrastructure/auth/auth.service';
   styleUrls: ['./video-view.component.css']
 })
 export class VideoViewComponent implements OnInit {
+  @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
+
   video!: Video;
   videoStreamUrl!: string;
   likes: number = 0;
@@ -45,6 +47,15 @@ export class VideoViewComponent implements OnInit {
       // Load comments
       this.videoService.getComments(id).subscribe(c => this.comments = c);
     });
+  }
+
+  onMetadataLoaded(): void {
+    if (this.video.live) {
+      const scheduledAt = new Date(this.video.scheduledAt);
+      const now = new Date();
+      const offsetSeconds = (now.getTime() - scheduledAt.getTime()) / 1000;
+      this.videoPlayer.nativeElement.currentTime = offsetSeconds;
+    }
   }
 
   postComment() {

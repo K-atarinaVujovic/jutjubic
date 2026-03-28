@@ -66,6 +66,12 @@
   background-color: var(--color-primary);
 }
 
+.live{
+  font-size: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 .like-emoji{
   font-size: 25px;
 }

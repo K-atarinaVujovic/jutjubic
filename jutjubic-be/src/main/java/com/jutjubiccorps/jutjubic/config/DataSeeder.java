@@ -75,7 +75,7 @@ public class DataSeeder implements ApplicationRunner {
                 thumbnailUrl + "thumbnail4.png",
                 videoUrl + "video4.mp4",
                 "Ultimate home",
-                LocalDateTime.now().plusSeconds(30)
+                LocalDateTime.now().plusSeconds(5)
         );
 
         videoService.save(video1);

@@ -8,6 +8,10 @@
   </div>
 
   <div class="video-info">
-    <h3 class="title">{{ video.title }}</h3>
+    <span *ngIf="video.live" class="live">
+      <span>🔴</span>
+      <span>LIVE</span>
+    </span>
+    <span class="title">{{ video.title }}</span>
   </div>
 </div>

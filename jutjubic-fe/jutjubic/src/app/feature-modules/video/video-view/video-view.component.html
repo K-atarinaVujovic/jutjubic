@@ -2,10 +2,13 @@
   <!-- Video player -->
   <div class="video-player-wrapper">
     <video
+      #videoPlayer
       *ngIf="videoStreamUrl"
       [src]="videoStreamUrl"
+      (loadedmetadata)="onMetadataLoaded()"
       controls
       autoplay
+      [muted]="true"
       class="video-player">
       Your browser does not support the video tag.
     </video>
@@ -14,11 +17,17 @@
   <!-- Video info -->
   <div class="video-info">
     <h2 class="video-title">{{ video.title }}</h2>
+    <span *ngIf="video.live" class="live">
+      <span>🔴</span>
+      <span>LIVE</span>
+    </span>
     <div class="video-meta">
       <span class="video-date">{{ video.dateCreated | date:'medium' }}</span>
       <span class="video-views">Views: {{ video.viewCount }}</span>
       <span class="video-location" *ngIf="video.location">Location: {{ video.location }}</span>
     </div>
+
+    
 
     <div class="video-tags" *ngIf="video.tags?.length">
       <span class="tag" *ngFor="let tag of video.tags">#{{ tag }}</span>
