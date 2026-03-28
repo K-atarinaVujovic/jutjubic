@@ -107,7 +107,7 @@ public class Video {
     }
 
     @Transient
-    boolean isLive(){
+    public boolean isLive(){
         if (scheduledAt == null) return false;
         LocalDateTime now = LocalDateTime.now();
         boolean startedStreaming = now.isAfter(scheduledAt);
@@ -116,7 +116,7 @@ public class Video {
     }
 
     @Transient
-    boolean isForRegularViewing(){
+    public boolean isForRegularViewing(){
         if (scheduledAt == null) return true;
         boolean finishedStreaming = Duration.between(scheduledAt, LocalDateTime.now()).getSeconds() >= durationSeconds;
         return finishedStreaming;

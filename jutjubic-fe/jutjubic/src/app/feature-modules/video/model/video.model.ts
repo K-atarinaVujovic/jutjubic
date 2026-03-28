@@ -9,4 +9,7 @@ export interface Video {
   dateCreated?: string;
   location: string;
   viewCount: number;
+  isLive: boolean;
+  isForRegularViewing: boolean;
+  scheduledAt: string;
 }
