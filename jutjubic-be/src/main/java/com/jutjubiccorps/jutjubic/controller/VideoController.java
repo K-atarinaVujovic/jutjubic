@@ -12,6 +12,8 @@ import com.jutjubiccorps.jutjubic.service.VideoInteractionService;
 import com.jutjubiccorps.jutjubic.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -24,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,6 +70,20 @@ public class VideoController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf("video/mp4"));
         return new ResponseEntity<>(videoBytes, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/hls/{filename}")
+    public ResponseEntity<Resource> serveHls (@PathVariable Long id, @PathVariable String filename) {
+        Path file = Paths.get("uploads/hls/" + id + "/" + filename);
+        System.out.println("============Looking for file at: " + file.toAbsolutePath());
+        System.out.println("File exists: " + Files.exists(file));
+        Resource resource = new FileSystemResource(file);
+
+        String contentType = filename.endsWith(".m3u8")
+                ? "application/vnd.apple.mpegurl"
+                : "video/MP2T";
+
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType)).body(resource);
     }
 
     @GetMapping("/thumbnail")

@@ -1,16 +1,17 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { VideoService } from '../service/video.service';
 import { Video } from '../model/video.model';
 import { Comment } from '../model/comment.model';
 import { AuthService } from 'src/app/infrastructure/auth/auth.service';
+import Hls from 'hls.js';
 
 @Component({
   selector: 'app-video-view',
   templateUrl: './video-view.component.html',
   styleUrls: ['./video-view.component.css']
 })
-export class VideoViewComponent implements OnInit {
+export class VideoViewComponent implements OnInit, AfterViewInit {
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
 
   video!: Video;
@@ -28,6 +29,12 @@ export class VideoViewComponent implements OnInit {
   ngOnInit(): void {
     const id = +this.route.snapshot.params['id'];
     this.loadVideo(id);
+    // this.loadVideoHls(id);
+  }
+
+  ngAfterViewInit(): void {
+    const id = +this.route.snapshot.params['id'];
+    this.loadVideoHls(id);
   }
 
   loadVideo(id: number) {
@@ -37,9 +44,9 @@ export class VideoViewComponent implements OnInit {
 
       // Video stream endpoint
       // this.videoStreamUrl = `http://localhost:8080/api/videos/${id}/stream`;
-      this.videoService.getVideoFile(this.video.id).subscribe(blob => {
-          this.videoStreamUrl = URL.createObjectURL(blob);
-        });
+      // this.videoService.getVideoFile(this.video.id).subscribe(blob => {
+      //     this.videoStreamUrl = URL.createObjectURL(blob);
+      //   });
 
       // Load likes
       this.videoService.getLikes(id).subscribe(l => this.likes = l);
@@ -47,6 +54,20 @@ export class VideoViewComponent implements OnInit {
       // Load comments
       this.videoService.getComments(id).subscribe(c => this.comments = c);
     });
+  }
+
+  loadVideoHls(id: number){
+    const video = this.videoPlayer?.nativeElement;
+    const manifestUrl = `http://localhost:8080/api/videos/${id}/hls/index.m3u8`;
+  
+    if(Hls.isSupported()){
+      const hls = new Hls();
+      hls.loadSource(manifestUrl);
+      hls.attachMedia(video);
+    }
+    else{
+      video.src = manifestUrl;
+    }
   }
 
   onMetadataLoaded(): void {

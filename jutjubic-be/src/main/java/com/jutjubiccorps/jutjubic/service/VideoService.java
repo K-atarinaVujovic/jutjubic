@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Service
@@ -36,7 +37,35 @@ public class VideoService {
     public Video save(Video video) throws IOException{
         double duration = extractDuration(video.getVideoUrl());
         video.setDurationSeconds(duration);
-        return videoRepository.save(video);
+        Video savedVideo =  videoRepository.save(video);
+        transcodeHls(savedVideo);
+        return savedVideo;
+    }
+
+    private void transcodeHls(Video video) throws IOException{
+        Path chunkDir = Paths.get(uploadDir + "hls/" + video.getId());
+        Files.createDirectories(chunkDir);
+
+        ProcessBuilder pb = new ProcessBuilder(
+                "ffmpeg", "-y", "-i", video.getVideoUrl(),
+                "-codec:", "copy",
+                "-start_number", "0",
+                "-hls_time", "6",
+                "-hls_list_size", "0",
+                "-f", "hls",
+                chunkDir.resolve("index.m3u8").toString()
+        );
+
+        try{
+            System.out.println("\nWaiting...\n");
+            pb.redirectError(ProcessBuilder.Redirect.DISCARD); // fix getting stuck
+            pb.start().waitFor();
+            System.out.println("\nDone waiting!\n");
+
+        }
+        catch(InterruptedException e){
+            throw new MediaIOException("Error: " + e.getMessage());
+        }
     }
 
     private double extractDuration(String videoPath) throws IOException {

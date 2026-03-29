@@ -83,8 +83,8 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
         );
 
-//        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
-        http.cors(cors -> cors.configure(http));
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
+//        http.cors(cors -> cors.configure(http));
         http.csrf(csrf -> csrf.disable());
 
         http.addFilterBefore(new TokenAuthenticationFilter(tokenUtils, userService), BasicAuthenticationFilter.class);
