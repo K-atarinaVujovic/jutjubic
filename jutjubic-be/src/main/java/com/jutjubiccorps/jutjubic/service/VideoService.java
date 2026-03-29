@@ -19,6 +19,8 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -78,6 +80,28 @@ public class VideoService {
         Process process = pb.start();
         String output = new String(process.getInputStream().readAllBytes());
         return Double.parseDouble(output.trim());
+    }
+
+    public int getCurrentChunk(Video video) throws IOException {
+        Long videoId = video.getId();
+        long offsetSeconds = Duration.between(video.getScheduledAt(), LocalDateTime.now()).getSeconds() + 60;
+        Path manifest = Paths.get(uploadDir + "hls/" + videoId + "/index.m3u8");
+        List<String> lines = Files.readAllLines(manifest);
+
+        double accumulated = 0;
+        int chunkIndex = 0;
+
+        for (String line : lines) {
+            if (line.startsWith("#EXTINF:")) {
+                double chunkDuration = Double.parseDouble(line.replace("#EXTINF:", "").replace(",", ""));
+                accumulated += chunkDuration;
+                if (accumulated > offsetSeconds) {
+                    return chunkIndex;
+                }
+                chunkIndex++;
+            }
+        }
+        return chunkIndex;
     }
 
     public void remove(Long id) {

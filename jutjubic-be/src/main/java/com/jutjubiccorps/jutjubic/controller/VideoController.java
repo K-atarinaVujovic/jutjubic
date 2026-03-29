@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -73,10 +75,21 @@ public class VideoController {
     }
 
     @GetMapping("/{id}/hls/{filename}")
-    public ResponseEntity<Resource> serveHls (@PathVariable Long id, @PathVariable String filename) {
+    public ResponseEntity<Resource> serveHls (@PathVariable Long id, @PathVariable String filename) throws IOException {
+        Video video = videoService.findById(id);
+        // Prevent forwarding
+        if (video.isLive() && filename.endsWith(".ts")) {
+            int requestedChunk = Integer.parseInt(filename.replaceAll("[^0-9]", ""));
+//            long offsetSeconds = Duration.between(video.getScheduledAt(), LocalDateTime.now()).getSeconds();
+//            int currentChunk = (int)(offsetSeconds / 6); // 6 = hls_time
+            int currentChunk = videoService.getCurrentChunk(video);
+//            System.out.println("=======\n======\n======\n======Requested: " + requestedChunk + ", Current: " + currentChunk + ", Offset: " + Duration.between(video.getScheduledAt(), LocalDateTime.now()).getSeconds() + "s");
+
+            if (requestedChunk > currentChunk) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        }
         Path file = Paths.get("uploads/hls/" + id + "/" + filename);
-        System.out.println("============Looking for file at: " + file.toAbsolutePath());
-        System.out.println("File exists: " + Files.exists(file));
         Resource resource = new FileSystemResource(file);
 
         String contentType = filename.endsWith(".m3u8")

@@ -11,7 +11,7 @@ import Hls from 'hls.js';
   templateUrl: './video-view.component.html',
   styleUrls: ['./video-view.component.css']
 })
-export class VideoViewComponent implements OnInit, AfterViewInit {
+export class VideoViewComponent implements OnInit {
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
 
   video!: Video;
@@ -32,10 +32,10 @@ export class VideoViewComponent implements OnInit, AfterViewInit {
     // this.loadVideoHls(id);
   }
 
-  ngAfterViewInit(): void {
-    const id = +this.route.snapshot.params['id'];
-    this.loadVideoHls(id);
-  }
+  // ngAfterViewInit(): void {
+  //   const id = +this.route.snapshot.params['id'];
+  //   this.loadVideoHls(id);
+  // }
 
   loadVideo(id: number) {
     this.videoService.getById(id).subscribe(video => {
@@ -53,6 +53,8 @@ export class VideoViewComponent implements OnInit, AfterViewInit {
 
       // Load comments
       this.videoService.getComments(id).subscribe(c => this.comments = c);
+
+      setTimeout(() => this.loadVideoHls(id), 0);
     });
   }
 
@@ -68,13 +70,26 @@ export class VideoViewComponent implements OnInit, AfterViewInit {
     else{
       video.src = manifestUrl;
     }
+
+    // prevent forwarding if live
+    video.addEventListener('seeking', () => {
+      if (this.video?.live) {
+        const expectedTime = this.calculateOffset();
+        if (video.currentTime > expectedTime) {
+          video.currentTime = expectedTime;
+        }
+      }
+    });
+  }
+
+  private calculateOffset(): number {
+    const scheduledAt = new Date(this.video.scheduledAt);
+    return (new Date().getTime() - scheduledAt.getTime()) / 1000;
   }
 
   onMetadataLoaded(): void {
     if (this.video.live) {
-      const scheduledAt = new Date(this.video.scheduledAt);
-      const now = new Date();
-      const offsetSeconds = (now.getTime() - scheduledAt.getTime()) / 1000;
+      const offsetSeconds = this.calculateOffset();
       this.videoPlayer.nativeElement.currentTime = offsetSeconds;
     }
   }
