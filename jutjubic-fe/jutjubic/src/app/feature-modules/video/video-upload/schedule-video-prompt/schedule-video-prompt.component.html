@@ -1,0 +1,24 @@
+<div class="container">
+  <p class="heading">Schedule live stream?</p>
+  <form [formGroup]="scheduleForm" class="flex-column flex-center">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date" />
+      <mat-datepicker-toggle matIconSuffix [for]="picker" />
+      <mat-datepicker #picker />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Time</mat-label>
+      <input matInput type="time" formControlName="time" />
+    </mat-form-field>
+
+    <div class="flex-row action-buttons">
+      <button mat-raised-button color="primary" type="submit" (click)="publishScheduled()">Schedule</button>
+      <button mat-raised-button color="primary" (click)="publishImmediately()">Publish immediately</button>
+    </div>
+
+    <p *ngIf="showMessage" class="error-message">{{message}}</p>
+  </form>
+</div>

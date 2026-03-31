@@ -114,7 +114,8 @@ public class VideoController {
             @RequestParam List<String> tags,
             @RequestPart MultipartFile thumbnail,
             @RequestPart MultipartFile videoFile,
-            @RequestParam(required = false) String location
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) LocalDateTime scheduledAt
     ) {
         if (videoFile.getSize() > 200 * 1024 * 1024) {
             throw new MediaIOException("Video exceeds maximum allowed size of 200MB");
@@ -130,7 +131,7 @@ public class VideoController {
             Files.copy(thumbnail.getInputStream(), thumbPath);
             Files.copy(videoFile.getInputStream(), videoPath);
 
-            Video video = new Video(title, description, tags, thumbPath.toString(), videoPath.toString(), location);
+            Video video = new Video(title, description, tags, thumbPath.toString(), videoPath.toString(), location, scheduledAt);
             Video saved = videoService.save(video);
             return new ResponseEntity<>(new VideoDTO(saved), HttpStatus.CREATED);
 

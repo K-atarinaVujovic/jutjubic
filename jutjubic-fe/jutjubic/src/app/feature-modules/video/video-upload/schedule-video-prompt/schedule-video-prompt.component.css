@@ -1,0 +1,29 @@
+.container{
+  width: 1000px;
+  height: 500px;
+  background-color: var(--color-bg);
+  border-radius: var(--border-radius);
+  padding: 30px;
+  border: 8px solid var(--color-primary);
+}
+
+mat-form-field{
+  width: 500px;
+}
+
+.heading{
+  font-size: 40px;
+}
+
+form{
+  height: 100%;
+  gap: 50px;
+}
+
+.action-buttons{
+  gap: 20px;
+}
+
+.action-buttons button{
+  padding: 10px;
+}
