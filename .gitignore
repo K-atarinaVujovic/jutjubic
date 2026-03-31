@@ -5,6 +5,7 @@ jutjubic-be/uploads/thumbnails/*
 jutjubic-be/uploads/videos/*
 !jutjubic-be/uploads/videos/video1.mp4
 !jutjubic-be/uploads/videos/video2.mp4
+jutjubic-be/uploads/hls/*
 
 
 # Angular specific
