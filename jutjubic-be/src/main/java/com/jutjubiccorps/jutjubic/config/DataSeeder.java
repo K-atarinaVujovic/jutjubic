@@ -35,8 +35,8 @@ public class DataSeeder implements ApplicationRunner {
 
     private void seedVideos() throws IOException {
         Instant now = Instant.now();
-        String thumbnailUrl = "uploads\\thumbnails\\";
-        String videoUrl = "uploads\\videos\\";
+        String thumbnailUrl = "uploads/thumbnails/";
+        String videoUrl = "uploads/videos/";
 
         Video video1 = new Video(
                 "cat stare",
