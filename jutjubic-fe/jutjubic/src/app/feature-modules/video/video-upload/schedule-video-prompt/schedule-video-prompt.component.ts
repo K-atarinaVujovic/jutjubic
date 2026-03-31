@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { VideoService } from '../../service/video.service';
 
@@ -10,6 +10,7 @@ import { VideoService } from '../../service/video.service';
 })
 export class ScheduleVideoPromptComponent implements OnInit {
   @Input() formData: FormData = new FormData();
+  @Output() close = new EventEmitter<void>();
   showMessage: boolean = false;
   message: string = "";
 
@@ -60,6 +61,10 @@ export class ScheduleVideoPromptComponent implements OnInit {
     console.log("SCHEDULEEEDDED: " + scheduledAt);
     this.formData.append('scheduledAt', scheduledAt);
     this.uploadVideo();
+  }
+
+  closePrompt(): void{
+    this.close.emit();
   }
 
   private convertToLocalDateTimeFormat(date: Date): string{

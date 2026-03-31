@@ -1,6 +1,11 @@
 <div class="main">
   <!-- Schedule video -->
-  <app-schedule-video-prompt *ngIf="showSchedulePrompt" [formData]="formData" class="schedule-video"></app-schedule-video-prompt>
+  <app-schedule-video-prompt 
+  [formData]="formData" 
+  (close)="showSchedulePrompt = false"
+  class="schedule-video"
+  *ngIf="showSchedulePrompt"
+  ></app-schedule-video-prompt>
 
   <!-- Video upload -->
   <h1>Video upload</h1>
