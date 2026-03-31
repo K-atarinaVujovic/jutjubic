@@ -16,7 +16,7 @@ export class VideoPreviewComponent {
 
   ngOnInit(): void {
     if (this.video.thumbnailUrl) {
-      this.videoService.getThumbnail(this.video.thumbnailUrl)
+      this.videoService.getThumbnail(this.video.id)
         .subscribe(blob => {
           this.thumbnailUrl = URL.createObjectURL(blob);
         });

@@ -12,6 +12,8 @@ import com.jutjubiccorps.jutjubic.service.VideoInteractionService;
 import com.jutjubiccorps.jutjubic.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -21,8 +23,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,13 +42,13 @@ public class VideoController {
     private final VideoInteractionService videoInteractionService;
     private final UserService userService;
 
-    @GetMapping("/all")
-    @PageableAsQueryParam
-    public ResponseEntity<Page<VideoDTO>> getAllVideos(Pageable pageable) {
-        Page<Video> videos = videoService.findAll(pageable);
-        Page<VideoDTO> dtoPage = videos.map(VideoDTO::new);
-        return ResponseEntity.ok(dtoPage);
-    }
+//    @GetMapping("/all")
+//    @PageableAsQueryParam
+//    public ResponseEntity<Page<VideoDTO>> getAllVideos(Pageable pageable) {
+//        Page<Video> videos = videoService.findAll(pageable);
+//        Page<VideoDTO> dtoPage = videos.map(VideoDTO::new);
+//        return ResponseEntity.ok(dtoPage);
+//    }
 
     @GetMapping("/all-sorted")
     public ResponseEntity<List<VideoDTO>> getAllVideosSorted() {
@@ -52,7 +58,7 @@ public class VideoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VideoDTO> getVideo(@PathVariable Long id) {
+    public ResponseEntity<VideoDTO> getVideo(@PathVariable Long id) throws IOException {
         // view video
         videoService.incrementViewCount(id);
         Video video = videoService.findById(id);
@@ -60,17 +66,42 @@ public class VideoController {
     }
 
     @GetMapping("/play")
-    public ResponseEntity<byte[]> getVideoFile(@RequestParam String path) {
-        byte[] videoBytes = videoService.loadVideo(path);
+    public ResponseEntity<byte[]> getVideoFile(@RequestParam Long id) {
+        byte[] videoBytes = videoService.loadVideo(id);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf("video/mp4"));
         return new ResponseEntity<>(videoBytes, headers, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}/hls/{filename}")
+    public ResponseEntity<Resource> serveHls (@PathVariable Long id, @PathVariable String filename) throws IOException {
+        Video video = videoService.findById(id);
+        // Prevent forwarding
+        if (video.isLive() && filename.endsWith(".ts")) {
+            int requestedChunk = Integer.parseInt(filename.replaceAll("[^0-9]", ""));
+//            long offsetSeconds = Duration.between(video.getScheduledAt(), LocalDateTime.now()).getSeconds();
+//            int currentChunk = (int)(offsetSeconds / 6); // 6 = hls_time
+            int currentChunk = videoService.getCurrentChunk(video);
+//            System.out.println("=======\n======\n======\n======Requested: " + requestedChunk + ", Current: " + currentChunk + ", Offset: " + Duration.between(video.getScheduledAt(), LocalDateTime.now()).getSeconds() + "s");
+
+            if (requestedChunk > currentChunk) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        }
+        Path file = Paths.get("uploads/hls/" + id + "/" + filename);
+        Resource resource = new FileSystemResource(file);
+
+        String contentType = filename.endsWith(".m3u8")
+                ? "application/vnd.apple.mpegurl"
+                : "video/MP2T";
+
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType)).body(resource);
+    }
+
     @GetMapping("/thumbnail")
-    public ResponseEntity<byte[]> getThumbnail(@RequestParam String path) {
-        byte[] img = videoService.loadThumbnail(path);
+    public ResponseEntity<byte[]> getThumbnail(@RequestParam Long id) {
+        byte[] img = videoService.loadThumbnail(id);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
         return new ResponseEntity<>(img, headers, HttpStatus.OK);
@@ -83,7 +114,8 @@ public class VideoController {
             @RequestParam List<String> tags,
             @RequestPart MultipartFile thumbnail,
             @RequestPart MultipartFile videoFile,
-            @RequestParam(required = false) String location
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) LocalDateTime scheduledAt
     ) {
         if (videoFile.getSize() > 200 * 1024 * 1024) {
             throw new MediaIOException("Video exceeds maximum allowed size of 200MB");
@@ -99,7 +131,7 @@ public class VideoController {
             Files.copy(thumbnail.getInputStream(), thumbPath);
             Files.copy(videoFile.getInputStream(), videoPath);
 
-            Video video = new Video(title, description, tags, thumbPath.toString(), videoPath.toString(), location);
+            Video video = new Video(title, description, tags, thumbPath.toString(), videoPath.toString(), location, scheduledAt);
             Video saved = videoService.save(video);
             return new ResponseEntity<>(new VideoDTO(saved), HttpStatus.CREATED);
 

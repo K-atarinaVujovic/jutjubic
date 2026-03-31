@@ -9,7 +9,10 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -22,7 +25,7 @@ public class DataSeeder implements ApplicationRunner {
     // fato134@yahoo.com fata12345
     // pera@yahoo.com pera
     @Override
-    public void run(ApplicationArguments args){
+    public void run(ApplicationArguments args) throws IOException{
         User f = userService.registerUser(new User("Fato", "Zirosrag", "fato@yahoo.com", "facini", "fato", "Bulevar Vladike Stepe 123"));
         User p = userService.registerUser(new User("Pera", "Peric", "pera@yahoo.com", "pera", "pera", "Perina adresa 3"));
         userService.activateUser(f);
@@ -30,7 +33,7 @@ public class DataSeeder implements ApplicationRunner {
         seedVideos();
     }
 
-    private void seedVideos(){
+    private void seedVideos() throws IOException {
         Instant now = Instant.now();
         String thumbnailUrl = "uploads\\thumbnails\\";
         String videoUrl = "uploads\\videos\\";
@@ -54,7 +57,30 @@ public class DataSeeder implements ApplicationRunner {
         );
         video2.setDateCreated(now.minus(1, ChronoUnit.HOURS));
 
+        // scheduled videos
+        Video video3 = new Video(
+                "Ultimate cat stare",
+                "Ultimate compilation",
+                List.of("cats", "funny", "compilation"),
+                thumbnailUrl + "thumbnail3.png",
+                videoUrl + "video3.mp4",
+                "Ultimate Home",
+                LocalDateTime.now().minusMinutes(10)
+        );
+
+        Video video4 = new Video(
+                "ultimate cat core",
+                "ultimate compilation of funny cat videos",
+                List.of("ok"),
+                thumbnailUrl + "thumbnail4.png",
+                videoUrl + "video4.mp4",
+                "Ultimate home",
+                LocalDateTime.now().plusSeconds(5)
+        );
+
         videoService.save(video1);
         videoService.save(video2);
+        videoService.save(video3);
+        videoService.save(video4);
     }
 }

@@ -15,6 +15,8 @@ export class VideoUploadComponent {
   selectedVideoFile: File | null = null;
   showError: boolean = true;
   errorMessage: string = "";
+  formData: FormData = new FormData();
+  showSchedulePrompt: boolean = false;
 
   uploadForm = new FormGroup({
     title: new FormControl('', [Validators.required]),
@@ -38,18 +40,22 @@ export class VideoUploadComponent {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('title', this.uploadForm.value.title!);
-    formData.append('description', this.uploadForm.value.description!);
-    formData.append('location', this.uploadForm.value.location!);
+    this.formData.append('title', this.uploadForm.value.title!);
+    this.formData.append('description', this.uploadForm.value.description!);
+    this.formData.append('location', this.uploadForm.value.location!);
     
     const tags = this.uploadForm.value.tags?.split(',').map(t => t.trim()) ?? [];
-    tags.forEach(tag => formData.append('tags', tag));
+    tags.forEach(tag => this.formData.append('tags', tag));
 
-    formData.append('thumbnail', this.selectedThumbnailFile!);
-    formData.append('videoFile', this.selectedVideoFile!);
+    this.formData.append('thumbnail', this.selectedThumbnailFile!);
+    this.formData.append('videoFile', this.selectedVideoFile!);
+  
+    this.showSchedulePrompt = true;
+  }
 
-    this.videoService.uploadVideo(formData).subscribe();
+  private setMessage(text: string){
+    this.errorMessage = text;
+    this.showError = true;
   }
 
   onThumbnailSelected(event: any){
@@ -67,10 +73,14 @@ export class VideoUploadComponent {
   }
 
   onVideoSelected(event: any) {
-  const input = event.target as HTMLInputElement;
-  if (input.files) {
-    this.selectedVideoFile = input.files[0];
-    this.videoPreview = URL.createObjectURL(input.files[0]);
+    const input = event.target as HTMLInputElement;
+    if (input.files![0].size > 200 * 1024 * 1024) {
+        this.setMessage('Video exceeds maximum allowed size of 200MB!!');
+        return;
+      }
+    if (input.files) {
+      this.selectedVideoFile = input.files[0];
+      this.videoPreview = URL.createObjectURL(input.files[0]);
+    }
   }
-}
 }

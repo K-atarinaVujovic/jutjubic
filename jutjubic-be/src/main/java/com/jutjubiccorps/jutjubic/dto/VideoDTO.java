@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor
@@ -22,7 +23,10 @@ public class VideoDTO {
                 video.getVideoUrl(),
                 video.getDateCreated(),
                 video.getLocation(),
-                video.getViewCount()
+                video.getViewCount(),
+                video.isLive(),
+                video.isForRegularViewing(),
+                video.getScheduledAt()
         );
     }
 
@@ -52,4 +56,13 @@ public class VideoDTO {
 
     @Getter
     private int viewCount;
+
+    @Getter
+    private boolean isLive;
+
+    @Getter
+    private boolean isForRegularViewing;
+
+    @Getter
+    private LocalDateTime scheduledAt;
 }

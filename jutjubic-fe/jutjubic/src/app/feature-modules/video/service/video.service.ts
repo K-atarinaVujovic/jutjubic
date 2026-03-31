@@ -29,8 +29,8 @@ export class VideoService {
     return this.http.get<Video>(`${this.baseUrl}/${id}`);
   }
 
-  getThumbnail(path: string): Observable<Blob> {
-    const params = new HttpParams().set('path', path);
+  getThumbnail(id: number): Observable<Blob> {
+    const params = new HttpParams().set('id', id);
     return this.http.get(`${this.baseUrl}/thumbnail`, {
       params,
       responseType: 'blob'
@@ -77,8 +77,8 @@ export class VideoService {
     return this.http.get<number>(`${this.baseUrl}/${videoId}/likes`);
   }
 
-  getVideoFile(path: string): Observable<Blob> {
-    const params = new HttpParams().set('path', path);
+  getVideoFile(id: number): Observable<Blob> {
+    const params = new HttpParams().set('id', id);
     return this.http.get(`${this.baseUrl}/play`, {
       params,
       responseType: 'blob'
