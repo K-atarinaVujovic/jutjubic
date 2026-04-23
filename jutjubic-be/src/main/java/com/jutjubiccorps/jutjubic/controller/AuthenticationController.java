@@ -6,6 +6,7 @@ import com.jutjubiccorps.jutjubic.dto.UserTokenState;
 import com.jutjubiccorps.jutjubic.exception.ConflictException;
 import com.jutjubiccorps.jutjubic.exception.ForbiddenException;
 import com.jutjubiccorps.jutjubic.mapper.UserDTOMapper;
+import com.jutjubiccorps.jutjubic.metrics.ActiveUsersMetric;
 import com.jutjubiccorps.jutjubic.model.User;
 import com.jutjubiccorps.jutjubic.service.EmailService;
 import com.jutjubiccorps.jutjubic.service.UserService;
@@ -37,13 +38,16 @@ public class AuthenticationController {
 
     final private EmailService emailService;
 
+    final private ActiveUsersMetric activeUsersMetric;
 
-    public AuthenticationController(EmailService emailService, TokenUtils tokenUtils, AuthenticationManager authenticationManager, UserService userService, UserDTOMapper userDTOMapper){
+
+    public AuthenticationController(EmailService emailService, TokenUtils tokenUtils, AuthenticationManager authenticationManager, UserService userService, UserDTOMapper userDTOMapper, ActiveUsersMetric activeUsersMetric){
         this.tokenUtils = tokenUtils;
                 this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.userDTOMapper = userDTOMapper;
         this.emailService = emailService;
+        this.activeUsersMetric = activeUsersMetric;
     }
 
     @PostMapping("/login")
@@ -62,7 +66,14 @@ public class AuthenticationController {
         String jwt = tokenUtils.generateToken(user);
         int expiresIn = tokenUtils.getExpiredIn();
 
+        activeUsersMetric.userLoggedIn();
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        activeUsersMetric.userLoggedOut();
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/register")
