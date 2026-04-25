@@ -8,7 +8,7 @@ jutjubic-be/uploads/videos/*
 jutjubic-be/uploads/hls/*
 
 # Prometheus
-jutjubic-be/prometheus/data/
+monitoring/prometheus/data/
 
 # Angular specific
 /dist/
