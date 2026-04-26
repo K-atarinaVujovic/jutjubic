@@ -66,6 +66,7 @@ public class AuthenticationController {
         String jwt = tokenUtils.generateToken(user);
         int expiresIn = tokenUtils.getExpiredIn();
 
+        System.out.println("=============LOGGED IN HELP");
         activeUsersMetric.userLoggedIn();
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
     }

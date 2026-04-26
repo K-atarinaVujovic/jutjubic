@@ -11,11 +11,12 @@ services:
   server:
     environment:
       - TZ=Europe/Belgrade
+      - SPRING_PROFILES_ACTIVE=docker
     build: ./jutjubic-be
     ports:
       - 8080:8080
     volumes:
-      - ./uploads:/uploads
+      - ./jutjubic-be/uploads:/uploads
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
 # start the database before your application. The `db-data` volume persists the
@@ -46,8 +47,25 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/dashboard.json:/etc/grafana/provisioning/dashboards/dashboard.json
+
 volumes:
   db-data:
+  grafana-data:
 # secrets:
 #   db-password:
 #     file: db/password.txt

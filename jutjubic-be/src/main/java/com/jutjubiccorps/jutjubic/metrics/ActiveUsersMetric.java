@@ -17,6 +17,6 @@ public class ActiveUsersMetric {
                 .register(registry);
     }
 
-    public void userLoggedIn() { activeUsers.incrementAndGet(); }
+    public void userLoggedIn() { System.out.println("======User logged in, active users: " + activeUsers.incrementAndGet()); }
     public void userLoggedOut() { activeUsers.decrementAndGet(); }
 }
