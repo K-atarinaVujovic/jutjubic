@@ -4,19 +4,25 @@
   "metadata": {
     "name": "ad6ddvv",
     "namespace": "default",
-    "uid": "141e6d2e-ec70-4218-a870-79501954943b",
-    "resourceVersion": "1777232049311985",
-    "generation": 4,
-    "creationTimestamp": "2026-04-26T19:31:08Z",
+    "uid": "2f0f0044-6575-48a8-a12d-7435872d6733",
+    "resourceVersion": "1777297437849006",
+    "generation": 5,
+    "creationTimestamp": "2026-04-27T13:42:01Z",
     "labels": {
-      "grafana.app/deprecatedInternalID": "3850838365048832"
+      "grafana.app/deprecatedInternalID": "4125345833701376"
     },
     "annotations": {
-      "grafana.app/createdBy": "user:dfka0q83z0j5sf",
+      "grafana.app/createdBy": "access-policy:service",
       "grafana.app/folder": "",
+      "grafana.app/managedBy": "classic-file-provisioning",
+      "grafana.app/managerAllowsEdits": "true",
+      "grafana.app/managerId": "default",
       "grafana.app/saved-from-ui": "Grafana v13.0.1 (a100054f)",
-      "grafana.app/updatedBy": "user:dfka0q83z0j5sf",
-      "grafana.app/updatedTimestamp": "2026-04-26T19:34:09Z"
+      "grafana.app/sourceChecksum": "f7b8b69d1e1017ed5e52e80f69768bd4",
+      "grafana.app/sourcePath": "/etc/grafana/provisioning/dashboards/dashboard.json",
+      "grafana.app/sourceTimestamp": "1777297281000",
+      "grafana.app/updatedBy": "user:dfkcwnh8afe9sb",
+      "grafana.app/updatedTimestamp": "2026-04-27T13:43:57Z"
     }
   },
   "spec": {
@@ -63,7 +69,7 @@
                       "group": "prometheus",
                       "version": "v0",
                       "datasource": {
-                        "name": "cfka3ni20qn7kc"
+                        "name": "PBFA97CFB590B2093"
                       },
                       "spec": {
                         "editorMode": "builder",
@@ -168,7 +174,7 @@
         "spec": {
           "id": 2,
           "title": "CPU usage",
-          "description": "",
+          "description": "If it's showing No data, windows exporter isn't running. Install it from: https://github.com/prometheus-community/windows_exporter/releases Run it with: windows_exporter --web.listen-address 127.0.0.1:8082",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -182,7 +188,7 @@
                       "group": "prometheus",
                       "version": "v0",
                       "datasource": {
-                        "name": "cfka3ni20qn7kc"
+                        "name": "PBFA97CFB590B2093"
                       },
                       "spec": {
                         "editorMode": "code",
@@ -301,7 +307,7 @@
                       "group": "prometheus",
                       "version": "v0",
                       "datasource": {
-                        "name": "cfka3ni20qn7kc"
+                        "name": "PBFA97CFB590B2093"
                       },
                       "spec": {
                         "editorMode": "code",
@@ -323,7 +329,7 @@
                       "group": "prometheus",
                       "version": "v0",
                       "datasource": {
-                        "name": "cfka3ni20qn7kc"
+                        "name": "PBFA97CFB590B2093"
                       },
                       "spec": {
                         "editorMode": "code",
