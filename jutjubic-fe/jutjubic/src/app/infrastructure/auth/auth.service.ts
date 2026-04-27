@@ -41,11 +41,20 @@ export class AuthService {
       );
   }
 
+  // logout() {
+  //   this.tokenStorage.clear();
+  //   this.user$.next({username: "", id: 0});
+  //   this.router.navigate(['/login']);
+  // }
   logout() {
-    this.tokenStorage.clear();
-    this.user$.next({username: "", id: 0});
-    this.router.navigate(['/login']);
-  }
+    this.http.post(`${environment.apiHost}/auth/logout`, {}).subscribe({
+        complete: () => {
+          this.tokenStorage.clear();
+          this.user$.next({username: "", id: 0});
+          this.router.navigate(['/login']);
+        }
+      });
+    }
 
   register(registration: Registration): Observable<AuthenticationResponse> {
     return this.http

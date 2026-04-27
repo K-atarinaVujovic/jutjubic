@@ -1,0 +1,19 @@
+global:
+  scrape_interval:	15s
+
+scrape_configs:
+  - job_name: 'jutjubic'
+    scrape_interval: 5s
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['server:8080']
+
+  - job_name: 'node'
+    scrape_interval: 2s
+    static_configs:
+      - targets: ['localhost:8081']
+
+  - job_name: 'windows'
+    scrape_interval: 2s
+    static_configs:
+      - targets: ['host.docker.internal:8082']
