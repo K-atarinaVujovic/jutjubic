@@ -71,6 +71,7 @@ public class VideoService {
     }
 
     private double extractDuration(String videoPath) throws IOException {
+        System.out.println("=======VIDEO PATH: " + videoPath);
         ProcessBuilder pb = new ProcessBuilder(
                 "ffprobe", "-v", "error",
                 "-show_entries", "format=duration",
