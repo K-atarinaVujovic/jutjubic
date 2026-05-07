@@ -1,21 +1,17 @@
 package com.jutjubiccorps.jutjubic.service;
 
+import com.jutjubiccorps.jutjubic.dto.VideoDTO;
 import com.jutjubiccorps.jutjubic.exception.MediaIOException;
 import com.jutjubiccorps.jutjubic.exception.NotFoundException;
 import com.jutjubiccorps.jutjubic.model.Video;
 import com.jutjubiccorps.jutjubic.repository.VideoRepository;
+import com.jutjubiccorps.jutjubic.repository.VideoViewRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,12 +23,17 @@ import java.util.List;
 public class VideoService {
 
     private final VideoRepository videoRepository;
+    private final VideoViewRepository videoViewRepository;
 
     @Value("${upload-dir}")
     private String uploadDir;
 
-    public VideoService(VideoRepository videoRepository) {
+    public VideoService(
+            VideoRepository videoRepository,
+            VideoViewRepository videoViewRepository
+    ) {
         this.videoRepository = videoRepository;
+        this.videoViewRepository = videoViewRepository;
     }
 
     //region CRUD
@@ -163,9 +164,11 @@ public class VideoService {
         }
     }
 
-    public List<Video> findAllSortedByDate() {
+    public List<VideoDTO> findAllSortedByDate() {
         List<Video> videos = videoRepository.findAllVisibleSorted(Sort.by(Sort.Direction.DESC, "dateCreated"));
-        return videos;
+        return videos.stream()
+                .map(video -> new VideoDTO(video, videoViewRepository.countByVideoId(video.getId())))
+                .toList();
     }
 
     public byte[] loadVideo(Long videoId) {
@@ -177,9 +180,4 @@ public class VideoService {
         }
     }
 
-    public void incrementViewCount(Long videoId) throws IOException{
-        Video video = findById(videoId);
-        video.incrementViewCount();
-        save(video);
-    }
 }

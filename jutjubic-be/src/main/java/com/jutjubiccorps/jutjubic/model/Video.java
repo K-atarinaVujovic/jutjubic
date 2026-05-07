@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -86,17 +85,9 @@ public class Video {
     @Getter
     private Instant dateCreated;
 
-    @Column(name = "viewCount", nullable = false)
-    @Getter
-    private int viewCount = 0;
-
     @Column(name = "scheduledAt", nullable = true)
     @Getter @Setter
     private LocalDateTime scheduledAt;
-
-    public synchronized void incrementViewCount() {
-        this.viewCount++;
-    }
 
     // Podesi datum pri pravljenju
     @PrePersist

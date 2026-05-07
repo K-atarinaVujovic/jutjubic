@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -22,7 +21,7 @@ public class DataSeeder implements ApplicationRunner {
     private final UserService userService;
     private final VideoService videoService;
 
-    // fato134@yahoo.com fata12345
+    // fato@yahoo.com fato
     // pera@yahoo.com pera
     @Override
     public void run(ApplicationArguments args) throws IOException{

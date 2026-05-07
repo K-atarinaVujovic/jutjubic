@@ -12,7 +12,6 @@ import com.jutjubiccorps.jutjubic.service.EmailService;
 import com.jutjubiccorps.jutjubic.service.UserService;
 import com.jutjubiccorps.jutjubic.util.TokenUtils;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
