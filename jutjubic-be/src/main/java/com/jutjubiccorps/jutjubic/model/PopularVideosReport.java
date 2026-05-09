@@ -1,11 +1,14 @@
 package com.jutjubiccorps.jutjubic.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
 @Entity
 @Table(name = "POPULAR_VIDEOS_REPORTS")
+@NoArgsConstructor
 public class PopularVideosReport {
     public PopularVideosReport(
             Instant runAt,
@@ -28,6 +31,7 @@ public class PopularVideosReport {
 
     @ManyToOne
     @JoinColumn(name = "video_id")
+    @Getter
     private Video video;
 
     @Column(name = "popularity_score", nullable = false)

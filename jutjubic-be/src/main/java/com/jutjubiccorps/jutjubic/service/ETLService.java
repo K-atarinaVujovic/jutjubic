@@ -25,7 +25,7 @@ public class ETLService {
     private final EntityManager entityManager;
 
     @Transactional
-    @Scheduled(cron = "0 15 19 * * *")
+    @Scheduled(cron = "0 43 19 * * *")
     public void runEtlPipeline() {
         Instant now = Instant.now();
         Instant sevenDaysAgo = now.minus(7, ChronoUnit.DAYS);

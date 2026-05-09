@@ -5,11 +5,10 @@ import com.jutjubiccorps.jutjubic.exception.MediaIOException;
 import com.jutjubiccorps.jutjubic.exception.NotFoundException;
 import com.jutjubiccorps.jutjubic.model.Comment;
 import com.jutjubiccorps.jutjubic.model.Like;
+import com.jutjubiccorps.jutjubic.model.PopularVideosReport;
 import com.jutjubiccorps.jutjubic.model.Video;
-import com.jutjubiccorps.jutjubic.service.UserService;
-import com.jutjubiccorps.jutjubic.service.VideoInteractionService;
-import com.jutjubiccorps.jutjubic.service.VideoService;
-import com.jutjubiccorps.jutjubic.service.VideoViewService;
+import com.jutjubiccorps.jutjubic.repository.PopularVideosReportRepository;
+import com.jutjubiccorps.jutjubic.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -37,12 +36,17 @@ public class VideoController {
     private final VideoService videoService;
     private final VideoInteractionService videoInteractionService;
     private final VideoViewService videoViewService;
-    private final UserService userService;
 
     @GetMapping("/all-sorted")
     public ResponseEntity<List<VideoDTO>> getAllVideosSorted() {
         List<VideoDTO> videos = videoService.findAllSortedByDate();
         return ResponseEntity.ok(videos);
+    }
+
+    @GetMapping("/popular-latest")
+    public ResponseEntity<List<VideoDTO>> getLatestPopular(){
+        List<VideoDTO> videos = videoService.getPopular();
+        return  ResponseEntity.ok(videos);
     }
 
     @GetMapping("/{id}")

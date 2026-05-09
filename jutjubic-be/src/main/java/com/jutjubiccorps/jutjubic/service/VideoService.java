@@ -3,7 +3,9 @@ package com.jutjubiccorps.jutjubic.service;
 import com.jutjubiccorps.jutjubic.dto.VideoDTO;
 import com.jutjubiccorps.jutjubic.exception.MediaIOException;
 import com.jutjubiccorps.jutjubic.exception.NotFoundException;
+import com.jutjubiccorps.jutjubic.model.PopularVideosReport;
 import com.jutjubiccorps.jutjubic.model.Video;
+import com.jutjubiccorps.jutjubic.repository.PopularVideosReportRepository;
 import com.jutjubiccorps.jutjubic.repository.VideoRepository;
 import com.jutjubiccorps.jutjubic.repository.VideoViewRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,16 +27,26 @@ public class VideoService {
 
     private final VideoRepository videoRepository;
     private final VideoViewRepository videoViewRepository;
+    private final PopularVideosReportRepository popularVideosReportRepository;
 
     @Value("${upload-dir}")
     private String uploadDir;
 
     public VideoService(
             VideoRepository videoRepository,
-            VideoViewRepository videoViewRepository
+            VideoViewRepository videoViewRepository,
+            PopularVideosReportRepository popularVideosReportRepository
     ) {
         this.videoRepository = videoRepository;
         this.videoViewRepository = videoViewRepository;
+        this.popularVideosReportRepository = popularVideosReportRepository;
+    }
+
+    public List<VideoDTO> getPopular(){
+        return popularVideosReportRepository.findAllByOrderByPopularityScoreDesc()
+                .stream()
+                .map(report -> new VideoDTO(report.getVideo(), videoViewRepository.countByVideoId(report.getVideo().getId())))
+                .toList();
     }
 
     //region CRUD
@@ -124,14 +137,6 @@ public class VideoService {
         return videoRepository.findAllVisible();
     }
 
-
-//    public Page<Video> findAll(Pageable pageable) {
-//        return videoRepository.findAllByOrderByDateCreatedDesc(pageable);
-//    }
-
-//    public Page<Video> searchByTitle(String title, Pageable pageable) {
-//        return videoRepository.findByTitleContainingIgnoreCase(title, pageable);
-//    }
 
     @Cacheable("thumbnails")
     public byte[] loadThumbnail(Long id)  {
