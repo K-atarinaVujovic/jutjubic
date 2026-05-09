@@ -62,23 +62,27 @@ public class SecurityConfig {
         http.exceptionHandling(exception -> exception.authenticationEntryPoint(restAuthenticationEntryPoint));
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/auth/logout").authenticated()
-
-                // unauthenticated paths here:
+                .requestMatchers("/api/videos/*/hls/**").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
 
                 // static resources:
                 .requestMatchers(
-                "/favicon.ico",
-                "/webjars/**",
-                "/css/**",
-                "/js/**",
-                "/images/**",
-                "/static/**"
+                        "/favicon.ico",
+                        "/webjars/**",
+                        "/css/**",
+                        "/js/**",
+                        "/images/**",
+                        "/static/**"
                 ).permitAll()
 
-                // for any other reqs user must be authenticated:
-                .anyRequest().permitAll()
+                .requestMatchers(
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html"
+                ).permitAll()
+
+                .anyRequest().authenticated()
         );
 
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));

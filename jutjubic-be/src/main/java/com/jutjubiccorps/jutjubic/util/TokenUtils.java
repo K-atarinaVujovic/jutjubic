@@ -49,7 +49,7 @@ public class TokenUtils
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuer(APP_NAME)
-                .setSubject(user.getUsername())
+                .setSubject(user.getEmail())
                 .setAudience(generateAudience())
                 .setIssuedAt(new Date())
                 .setExpiration(generateExpirationDate())
@@ -168,7 +168,7 @@ public class TokenUtils
         final String username = getUsernameFromToken(token);
         final Date created = getIssuedDateFromToken(token);
 
-        Boolean isValid = username != null && username.equals(userDetails.getUsername()) && userDetails.isEnabled(); // TODO: check if acc is activated
+        Boolean isValid = username != null && username.equals(((User) userDetails).getEmail()) && userDetails.isEnabled();
 
         return isValid;
     }
