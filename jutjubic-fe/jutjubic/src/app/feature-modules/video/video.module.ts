@@ -11,13 +11,15 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { PopularVideosComponent } from './popular-videos/popular-videos.component';
 
 @NgModule({
   declarations: [
     VideoPreviewComponent,
     VideoViewComponent,
     VideoUploadComponent,
-    ScheduleVideoPromptComponent
+    ScheduleVideoPromptComponent,
+    PopularVideosComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +32,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatFormFieldModule,
 ],
   exports: [
-    VideoPreviewComponent
+    VideoPreviewComponent,
+    PopularVideosComponent
   ]
 })
 export class VideoModule { }
