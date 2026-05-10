@@ -1,21 +1,17 @@
 package com.jutjubiccorps.jutjubic.controller;
 
-import com.jutjubiccorps.jutjubic.dto.CreateVideoDTO;
 import com.jutjubiccorps.jutjubic.dto.VideoDTO;
 import com.jutjubiccorps.jutjubic.exception.MediaIOException;
 import com.jutjubiccorps.jutjubic.exception.NotFoundException;
 import com.jutjubiccorps.jutjubic.model.Comment;
 import com.jutjubiccorps.jutjubic.model.Like;
+import com.jutjubiccorps.jutjubic.model.PopularVideosReport;
 import com.jutjubiccorps.jutjubic.model.Video;
-import com.jutjubiccorps.jutjubic.service.UserService;
-import com.jutjubiccorps.jutjubic.service.VideoInteractionService;
-import com.jutjubiccorps.jutjubic.service.VideoService;
+import com.jutjubiccorps.jutjubic.repository.PopularVideosReportRepository;
+import com.jutjubiccorps.jutjubic.service.*;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,7 +23,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -40,29 +35,27 @@ public class VideoController {
 
     private final VideoService videoService;
     private final VideoInteractionService videoInteractionService;
-    private final UserService userService;
-
-//    @GetMapping("/all")
-//    @PageableAsQueryParam
-//    public ResponseEntity<Page<VideoDTO>> getAllVideos(Pageable pageable) {
-//        Page<Video> videos = videoService.findAll(pageable);
-//        Page<VideoDTO> dtoPage = videos.map(VideoDTO::new);
-//        return ResponseEntity.ok(dtoPage);
-//    }
+    private final VideoViewService videoViewService;
 
     @GetMapping("/all-sorted")
     public ResponseEntity<List<VideoDTO>> getAllVideosSorted() {
-        List<Video> videos = videoService.findAllSortedByDate();
-        List<VideoDTO> dtos = videos.stream().map(VideoDTO::new).toList();
-        return ResponseEntity.ok(dtos);
+        List<VideoDTO> videos = videoService.findAllSortedByDate();
+        return ResponseEntity.ok(videos);
+    }
+
+    @GetMapping("/popular-latest")
+    public ResponseEntity<List<VideoDTO>> getLatestPopular(){
+        List<VideoDTO> videos = videoService.getPopular();
+        return  ResponseEntity.ok(videos);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<VideoDTO> getVideo(@PathVariable Long id) throws IOException {
-        // view video
-        videoService.incrementViewCount(id);
         Video video = videoService.findById(id);
-        return ResponseEntity.ok(new VideoDTO(video));
+        // view video
+        videoInteractionService.incrementViewCount(video);
+        long viewCount = videoViewService.countByVideoId(video.getId());
+        return ResponseEntity.ok(new VideoDTO(video, viewCount));
     }
 
     @GetMapping("/play")
@@ -80,10 +73,7 @@ public class VideoController {
         // Prevent forwarding
         if (video.isLive() && filename.endsWith(".ts")) {
             int requestedChunk = Integer.parseInt(filename.replaceAll("[^0-9]", ""));
-//            long offsetSeconds = Duration.between(video.getScheduledAt(), LocalDateTime.now()).getSeconds();
-//            int currentChunk = (int)(offsetSeconds / 6); // 6 = hls_time
             int currentChunk = videoService.getCurrentChunk(video);
-//            System.out.println("=======\n======\n======\n======Requested: " + requestedChunk + ", Current: " + currentChunk + ", Offset: " + Duration.between(video.getScheduledAt(), LocalDateTime.now()).getSeconds() + "s");
 
             if (requestedChunk > currentChunk) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -133,7 +123,7 @@ public class VideoController {
 
             Video video = new Video(title, description, tags, thumbPath.toString(), videoPath.toString(), location, scheduledAt);
             Video saved = videoService.save(video);
-            return new ResponseEntity<>(new VideoDTO(saved), HttpStatus.CREATED);
+            return new ResponseEntity<>(new VideoDTO(saved, 0), HttpStatus.CREATED);
 
         } catch (Exception e) {
             throw new MediaIOException("Failed to save uploaded files");

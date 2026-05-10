@@ -1,9 +1,10 @@
 package com.jutjubiccorps.jutjubic.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @NoArgsConstructor

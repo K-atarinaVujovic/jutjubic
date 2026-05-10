@@ -20,3 +20,7 @@
 app-video-preview{
   cursor: pointer;
 }
+
+app-popular-videos {
+  grid-column: 1 / -1;
+}

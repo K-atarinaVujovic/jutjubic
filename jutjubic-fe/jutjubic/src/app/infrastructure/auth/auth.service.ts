@@ -56,17 +56,15 @@ export class AuthService {
       });
     }
 
-  register(registration: Registration): Observable<AuthenticationResponse> {
+  register(registration: Registration): Observable<any> {
     return this.http
-      .post<AuthenticationResponse>(
+      .post<any>(
         `${environment.apiHost}/auth/register`,
         registration
       )
       .pipe(
         tap(res => {
-          this.tokenStorage.saveAccessToken(res.accessToken);
-          this.setUserFromToken();
-          this.router.navigate(['/home']);
+          this.router.navigate(['/login']);
         })
       );
   }

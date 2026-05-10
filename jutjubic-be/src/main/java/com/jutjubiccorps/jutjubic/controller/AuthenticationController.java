@@ -12,7 +12,6 @@ import com.jutjubiccorps.jutjubic.service.EmailService;
 import com.jutjubiccorps.jutjubic.service.UserService;
 import com.jutjubiccorps.jutjubic.util.TokenUtils;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -78,7 +77,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserTokenState> addUser(@RequestBody CreateUserDTO userRequest, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Void> addUser(@RequestBody CreateUserDTO userRequest, UriComponentsBuilder ucBuilder) {
         boolean existUser = this.userService.existsByUsername(userRequest.getUsername());
 
         if (existUser) {
@@ -99,7 +98,8 @@ public class AuthenticationController {
         String jwt = tokenUtils.generateToken(user);
         int expiresIn = tokenUtils.getExpiredIn();
 
-        return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
+//        return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/validateToken")

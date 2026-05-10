@@ -3,7 +3,6 @@ package com.jutjubiccorps.jutjubic.service;
 import com.jutjubiccorps.jutjubic.model.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.mail.MessagingException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
@@ -20,11 +19,6 @@ public class EmailService {
 
     @Value("${app.frontend.url}")
     private String frontendUrl;
-
-    /*
-     * Koriscenje klase za ocitavanje vrednosti iz application.properties fajla
-     */
-//    private final Environment env;
 
     public EmailService (JavaMailSender javaMailSender, Environment env){
         this.javaMailSender = javaMailSender;

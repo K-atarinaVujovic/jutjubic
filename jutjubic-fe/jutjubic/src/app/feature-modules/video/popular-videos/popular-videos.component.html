@@ -1,7 +1,6 @@
-<div class="home">
-  <h1>Home</h1>
-  <div class="content">
-    <app-popular-videos />
+<div class="popular-videos">
+  <h2>Popular</h2>
+  <div class="popular-videos__list">
     <app-video-preview
       *ngFor="let video of videos"
       [video]="video"

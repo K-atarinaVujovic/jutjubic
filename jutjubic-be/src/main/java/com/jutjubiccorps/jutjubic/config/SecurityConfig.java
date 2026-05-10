@@ -5,10 +5,8 @@ import com.jutjubiccorps.jutjubic.security.auth.RestAuthenticationEntryPoint;
 import com.jutjubiccorps.jutjubic.security.auth.TokenAuthenticationFilter;
 import com.jutjubiccorps.jutjubic.service.UserService;
 import com.jutjubiccorps.jutjubic.util.TokenUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -16,7 +14,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -65,23 +62,28 @@ public class SecurityConfig {
         http.exceptionHandling(exception -> exception.authenticationEntryPoint(restAuthenticationEntryPoint));
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/auth/logout").authenticated()
-
-                // unauthenticated paths here:
+                .requestMatchers("/api/videos/*/hls/**").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/actuator/prometheus").permitAll()
 
                 // static resources:
                 .requestMatchers(
-                "/favicon.ico",
-                "/webjars/**",
-                "/css/**",
-                "/js/**",
-                "/images/**",
-                "/static/**"
+                        "/favicon.ico",
+                        "/webjars/**",
+                        "/css/**",
+                        "/js/**",
+                        "/images/**",
+                        "/static/**"
                 ).permitAll()
 
-                // for any other reqs user must be authenticated:
-                .anyRequest().permitAll()
+                .requestMatchers(
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html"
+                ).permitAll()
+
+                .anyRequest().authenticated()
         );
 
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));

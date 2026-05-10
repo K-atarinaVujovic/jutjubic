@@ -1,12 +1,10 @@
 package com.jutjubiccorps.jutjubic.service;
 
 import com.jutjubiccorps.jutjubic.exception.NotFoundException;
-import com.jutjubiccorps.jutjubic.model.Comment;
-import com.jutjubiccorps.jutjubic.model.Like;
-import com.jutjubiccorps.jutjubic.model.User;
-import com.jutjubiccorps.jutjubic.model.Video;
+import com.jutjubiccorps.jutjubic.model.*;
 import com.jutjubiccorps.jutjubic.repository.CommentRepository;
 import com.jutjubiccorps.jutjubic.repository.LikeRepository;
+import com.jutjubiccorps.jutjubic.repository.VideoViewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +15,14 @@ import java.util.List;
 public class VideoInteractionService {
     private final CommentRepository commentRepo;
     private final LikeRepository likeRepo;
+    private final VideoViewRepository viewRepo;
     private final VideoService videoService;
     private final UserService userService;
+
+    public void incrementViewCount(Video video){
+        VideoView newView = new VideoView(video);
+        viewRepo.save(newView);
+    }
 
     public Comment addComment(Long videoId, Long userId, String text) {
         Video video = videoService.findById(videoId);

@@ -1,0 +1,15 @@
+.popular-videos {
+  margin-bottom: 24px;
+  background-color: var(--color-primary);
+  border-radius: var(--border-radius);
+  padding: 20px;
+}
+
+.popular-videos__list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+app-video-preview{
+  cursor: pointer;
+}

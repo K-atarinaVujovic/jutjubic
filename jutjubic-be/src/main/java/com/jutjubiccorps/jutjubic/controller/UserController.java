@@ -1,21 +1,20 @@
 package com.jutjubiccorps.jutjubic.controller;
 
-import com.jutjubiccorps.jutjubic.dto.CreateUserDTO;
 import com.jutjubiccorps.jutjubic.dto.UserDTO;
 import com.jutjubiccorps.jutjubic.mapper.UserDTOMapper;
 import com.jutjubiccorps.jutjubic.model.User;
 import com.jutjubiccorps.jutjubic.service.UserService;
-import org.apache.coyote.Response;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "api/users")
@@ -53,13 +52,4 @@ public class UserController {
 
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
     }
-
-//    @PostMapping("/register")
-//    public ResponseEntity<UserDTO> registerUser(CreateUserDTO dto){
-//        User newUser = userMapper.fromCreateUserDTO(dto);
-//
-//        User user = userService.registerUser(newUser);
-//
-//        return new ResponseEntity<>(new UserDTO(user), HttpStatus.CREATED);
-//    }
 }

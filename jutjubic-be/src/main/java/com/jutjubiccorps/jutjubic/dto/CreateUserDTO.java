@@ -1,6 +1,5 @@
 package com.jutjubiccorps.jutjubic.dto;
 
-import com.jutjubiccorps.jutjubic.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

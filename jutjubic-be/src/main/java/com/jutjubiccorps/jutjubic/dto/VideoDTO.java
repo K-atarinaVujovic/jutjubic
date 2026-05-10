@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class VideoDTO {
 
-    public VideoDTO(Video video) {
+    public VideoDTO(Video video, long viewCount) {
         this(
                 video.getId(),
                 video.getTitle(),
@@ -23,7 +23,7 @@ public class VideoDTO {
                 video.getVideoUrl(),
                 video.getDateCreated(),
                 video.getLocation(),
-                video.getViewCount(),
+                viewCount,
                 video.isLive(),
                 video.isForRegularViewing(),
                 video.getScheduledAt()
@@ -55,7 +55,7 @@ public class VideoDTO {
     private String location;
 
     @Getter
-    private int viewCount;
+    private long viewCount;
 
     @Getter
     private boolean isLive;

@@ -84,4 +84,8 @@ export class VideoService {
       responseType: 'blob'
     });
   }
+
+  getPopular(): Observable<any>{
+    return this.http.get<any>(`${this.baseUrl}/popular-latest`);
+  }
 }
