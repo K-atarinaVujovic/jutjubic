@@ -6,8 +6,10 @@ Docker will start up the server, db, grafana and prometheus.
 Swagger is running on: http://localhost:8080/swagger-ui/index.html
 
 # Running the client
-In [jutjubic-fe/jutjubic/src](https://github.com/K-atarinaVujovic/jutjubic/tree/f4be1c7912dee21e021a426a3dce18018987dded/jutjubic-fe/jutjubic/src) run:  
-`npm install`  
+In [jutjubic-fe/jutjubic](https://github.com/K-atarinaVujovic/jutjubic/tree/e2711b04fb7d02b707f5205a17b5eac1451e832c/jutjubic-fe/jutjubic) run:  
+`npm install`   
+
+In [jutjubic-fe/jutjubic/src](https://github.com/K-atarinaVujovic/jutjubic/tree/f4be1c7912dee21e021a426a3dce18018987dded/jutjubic-fe/jutjubic/src) run:   
 `ng serve`
 
 # Monitoring 
