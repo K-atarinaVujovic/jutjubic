@@ -20,3 +20,13 @@ Prometheus queries are running on: http://localhost:9090/query
 To test active and idle db connections, run the load test in [jutjubic/monitoring/testing](https://github.com/K-atarinaVujovic/jutjubic/blob/f4be1c7912dee21e021a426a3dce18018987dded/monitoring/testing/load_test.js):  
 `k6 run load_test.js`  
 Make sure to get a valid JWT and place in `const token` so the test can have access to the endpoint.
+
+# DB queries
+DB query for counting video views per day for ETL demo:  
+```
+SELECT video_id, DATE(viewed_at) as view_date, COUNT(*) as view_count,
+    CURRENT_DATE - DATE(viewed_at) as days_ago
+FROM public.video_views 
+GROUP BY video_id, DATE(viewed_at)
+ORDER BY video_id, days_ago DESC
+```
