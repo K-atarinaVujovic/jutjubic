@@ -12,6 +12,12 @@ In [jutjubic-fe/jutjubic](https://github.com/K-atarinaVujovic/jutjubic/tree/e271
 In [jutjubic-fe/jutjubic/src](https://github.com/K-atarinaVujovic/jutjubic/tree/f4be1c7912dee21e021a426a3dce18018987dded/jutjubic-fe/jutjubic/src) run:   
 `ng serve`
 
+User can login with:  
+```
+Email: pera@yahoo.com
+Password: pera
+```
+
 # Monitoring 
 To be able to view CPU usage in Grafana dashboard, run windows exporter in a cmd:  
 `windows_exporter --web.listen-address 127.0.0.1:8082`
