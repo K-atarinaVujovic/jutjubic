@@ -49,9 +49,10 @@ public class DataSeeder implements ApplicationRunner {
                 List.of("cats", "funny", "compilation"),
                 thumbnailUrl + "thumbnail1.png",
                 videoUrl + "video1.mp4",
-                "Home",
-                LocalDateTime.now().minusDays(15)
+                "Home"
         );
+        video1.setDateCreated(now.minus(15, ChronoUnit.DAYS));
+
 
         Video video2 = new Video(
                 "cat core 2",
@@ -59,10 +60,10 @@ public class DataSeeder implements ApplicationRunner {
                 List.of("haha", "a", "mm"),
                 thumbnailUrl + "thumbnail2.png",
                 videoUrl + "video2.mp4",
-                "Home",
-                LocalDateTime.now().minusDays(15)
+                "Home"
         );
-        video2.setDateCreated(now.minus(1, ChronoUnit.HOURS));
+        video2.setDateCreated(now.minus(15, ChronoUnit.DAYS));
+
 
         // scheduled videos
         Video video3 = new Video(
@@ -92,9 +93,10 @@ public class DataSeeder implements ApplicationRunner {
                 List.of("cats", "funny", "compilation"),
                 thumbnailUrl + "thumbnail1.png",
                 videoUrl + "video1.mp4",
-                "Home",
-                LocalDateTime.now().minusDays(15)
+                "Home"
         );
+        video5.setDateCreated(now.minus(15, ChronoUnit.DAYS));
+
 
         Video video6 = new Video(
                 "cat stare 6",
@@ -102,9 +104,10 @@ public class DataSeeder implements ApplicationRunner {
                 List.of("cats", "funny", "compilation"),
                 thumbnailUrl + "thumbnail1.png",
                 videoUrl + "video1.mp4",
-                "Home",
-                LocalDateTime.now().minusDays(15)
+                "Home"
         );
+        video6.setDateCreated(now.minus(15, ChronoUnit.DAYS));
+
 
         Video video7 = new Video(
                 "cat stare 7",
@@ -112,9 +115,10 @@ public class DataSeeder implements ApplicationRunner {
                 List.of("cats", "funny", "compilation"),
                 thumbnailUrl + "thumbnail1.png",
                 videoUrl + "video1.mp4",
-                "Home",
-                LocalDateTime.now().minusDays(15)
+                "Home"
         );
+        video7.setDateCreated(now.minus(15, ChronoUnit.DAYS));
+
 
         Video savedVideo1 = videoService.save(video1);
         Video savedVideo2 = videoService.save(video2);
