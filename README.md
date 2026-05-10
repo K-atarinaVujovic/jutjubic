@@ -1,6 +1,6 @@
 # Running the server
-Run docker in root folder:
-`docker compose up --build`
+Run docker in root folder:  
+`docker compose up --build`  
 Docker will start up the server, db, grafana and prometheus.
 
 Swagger is running on: http://localhost:8080/swagger-ui/index.html
