@@ -77,7 +77,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserTokenState> addUser(@RequestBody CreateUserDTO userRequest, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Void> addUser(@RequestBody CreateUserDTO userRequest, UriComponentsBuilder ucBuilder) {
         boolean existUser = this.userService.existsByUsername(userRequest.getUsername());
 
         if (existUser) {
@@ -98,7 +98,8 @@ public class AuthenticationController {
         String jwt = tokenUtils.generateToken(user);
         int expiresIn = tokenUtils.getExpiredIn();
 
-        return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
+//        return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/validateToken")

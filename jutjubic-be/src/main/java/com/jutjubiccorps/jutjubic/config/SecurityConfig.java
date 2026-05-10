@@ -65,6 +65,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/logout").authenticated()
                 .requestMatchers("/api/videos/*/hls/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/actuator/prometheus").permitAll()
 
                 // static resources:
                 .requestMatchers(
