@@ -4,13 +4,13 @@ html, body { height: 100%; }
 :root{
   --c1: #B8B08D;
   --color-bg: #F9E9C8;
-  --color-surface: #F2D492;
+  --color-surface: #F2D491;
   --color-primary: #F29559;
   --color-danger: rgb(116, 49, 49);
   --border-radius: 10px;
 }
-body { 
-  margin: 0; 
+body {
+  margin: 0;
   background-color: var(--color-bg);
   /* font-family: Roboto, "Helvetica Neue", sans-serif;  */
 }
